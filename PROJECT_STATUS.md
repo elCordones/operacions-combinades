@@ -100,8 +100,10 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - [x] Interfície web responsive i accessible (`index.html`, `css/theme.css`, `css/layout.css`, `css/components.css`, `css/print.css`) amb guia ràpida `<dialog>`, panell mòbil del Contínuum en `<dialog>` natiu, selector d'aparença **Clar / Fosc / Dispositiu** (`color-scheme` + `light-dark()` amb persistència a `localStorage` i script anti-FOUC), diàleg de trofeu, control de so amb icones SVG i peu de llicències compacte (`© David Cordones · 2026`, AGPL v3 + CC BY-SA 4.0).
   - [x] Controladors de vistes (`setupView.js`, `gameView.js`, `reasoningView.js`, `assemblyView.js`, `continuumView.js`, `reportView.js`, `sound.js`, `main.js`) incloent-hi **Enllaç preconfigurat docent**, **Col·loca els parèntesis**, **Detecta l'error**, **Muntatge Final Interactiu**, *Entrenament Dirigit*, autoavaluació metacognitiva, historial desplegable `<details>` i impressió PDF (sempre en mode clar).
   - [x] Bateria automatitzada (`tests/verify-v1.js`) i proves E2E en Chrome headless: sintaxi JS vàlida, 1.380 exercicis en cascada + 420 reptes de raonament validats, regressió d'IDs/saneig de `localStorage`, enllaç preconfigurat URL, flux complet al DOM sense errors de consola, modes d'aparença, muntatge final i disseny responsive en escriptori (`1280×980`) i mòbil (`390×844`).
-- **Punt exacte on ens hem quedat**:
-  - S'han implementat l'enllaç preconfigurat docent (`?curs=&tema=&mode=&ex=&ops=&auto=`) amb botó *"Copiar enllaç per a la classe"* i els dos nous modes de raonament (*Col·loca els parèntesis* i *Detecta l'error*), publicats a GitHub Pages (`https://elcordones.github.io/operacions-combinades/`).
+- **Punt exacte on ens hem quedat (tancament de sessió 2026-11-26)**:
+  - Publicada la V2.0 a GitHub Pages (`https://elcordones.github.io/operacions-combinades/`) amb l'enllaç preconfigurat docent (`?curs=&tema=&mode=&ex=&ops=&auto=`), el botó *"Copiar enllaç per a la classe"*, els modes de raonament (*Col·loca els parèntesis* i *Detecta l'error*) i el muntatge final tipus trencaclosques (`assemblyView.js`).
+  - Simplificat el peu de pàgina a `index.html` (eliminat el text redundant entre parèntesis mantenint la icona oficial `88x31`, `© David Cordones · 2026`, `AGPL v3` i l'enllaç `CC BY-SA 4.0`, commit `e72b625`).
+  - Repositori net, verificat amb `node tests/verify-v1.js` (totes les proves en verd) i sincronitzat amb `origin/main`.
 - **Decisions tècniques i incidències conegudes**:
   - Arquitectura 100% *client-side* basada en IIFEs sota l'espai de noms compartit `globalThis.OpComb` (carregats amb `<script defer>`), compatible tant amb doble clic sobre `index.html` (`file://`) com amb servidor web.
   - `AST.clone(node)` ara preserva `node.id`, i `Session` centralitza la inicialització d'exercicis a `createExerciseState` garantint IDs vàlids des del primer moment.
@@ -130,7 +132,7 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - [x] Implementar enllaç preconfigurat per al docent (`?curs=...&tema=...&mode=...&ops=...`) i botó *"Copiar enllaç per a la classe"*.
   - [x] Implementar els modes de raonament *«Col·loca els parèntesis»* i *«Detecta l'error»* (`js/math/reasoning.js` + `js/ui/reasoningView.js`).
 - **Fase 6 — Backlog i millores futures (V2.1 / V3)**:
-  - [ ] Prova real a l'aula / impressió PDF en paper i recollida de feedback docent.
+  - [ ] **Pas immediat per a la propera sessió**: Prova real a l'aula / impressió PDF en paper i recollida de feedback docent abans d'abordar noves ampliacions.
   - [ ] **Mini-problemes contextualitzats**: situació breu d'aula on triar l'expressió combinada correcta entre 3 opcions abans de resoldre-la pas a pas.
   - [ ] **Teclat numèric integrat en pantalla**: activable o automàtic en PDI/tauleta perquè el teclat virtual del sistema no tapi l'expressió al Pas 2.
   - [ ] **Lectura en veu alta de pistes (DUA)**: síntesi de veu en català (`Web Speech API ca-ES`) opcional a les pistes formatives i guia ràpida.
