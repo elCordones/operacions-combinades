@@ -41,6 +41,8 @@
     const trophyModalArt = document.getElementById('trophy-modal-art');
     const trophyModalTitle = document.getElementById('trophy-modal-title');
     const trophyModalDesc = document.getElementById('trophy-modal-desc');
+    const trophyModalForm = document.getElementById('trophy-modal-form');
+    const btnTrophyContinue = document.getElementById('btn-trophy-continue');
 
     let currentSession = null;
 
@@ -326,10 +328,18 @@
         trophyModalArt.innerHTML = trophy.svg;
         trophyModalTitle.textContent = trophy.name;
         trophyModalDesc.textContent = trophy.desc;
+        if (btnTrophyContinue) {
+          btnTrophyContinue.textContent =
+            outcome.event === 'session_done' ? 'Munta l’element final! →' : 'Continua!';
+        }
         Sound.playTrophy();
 
-        const onTrophyClosed = () => {
+        let handled = false;
+        const finishTrophyStep = () => {
+          if (handled) return;
+          handled = true;
           trophyDialog.removeEventListener('close', onTrophyClosed);
+          if (trophyModalForm) trophyModalForm.removeEventListener('submit', onTrophySubmit);
           if (outcome.event === 'session_done') {
             callbacks.onGoAssembly();
           } else {
@@ -337,7 +347,15 @@
             challengeTitle.focus();
           }
         };
+        const onTrophyClosed = () => finishTrophyStep();
+        const onTrophySubmit = () => {
+          queueMicrotask(() => {
+            if (trophyDialog.open) trophyDialog.close();
+            finishTrophyStep();
+          });
+        };
         trophyDialog.addEventListener('close', onTrophyClosed);
+        if (trophyModalForm) trophyModalForm.addEventListener('submit', onTrophySubmit);
         trophyDialog.showModal();
         return;
       }
@@ -353,6 +371,11 @@
 
     btnFinishEarly.addEventListener('click', () => {
       if (!currentSession) return;
+      const ex = currentSession.currentExercise;
+      const isTargeted = Boolean(currentSession.targeted && currentSession.targeted.active);
+      if (ex && ex.currentAst && ex.currentAst.type === 'num' && !isTargeted) {
+        Session.advanceAfterExerciseComplete(currentSession);
+      }
       currentSession.view = 'report';
       Session.saveSession(currentSession);
       callbacks.onGoReport();

@@ -106,6 +106,7 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - `navigateTo()` protegeix `document.startViewTransition` quan `document.hidden` és cert o la transició s'avorta (`InvalidStateError`) per evitar promeses rebutjades sense capturar.
   - Mode d'aparença implementat amb primitives Baseline (`<meta name="color-scheme" content="light dark">`, `color-scheme` i `light-dark()`) i forçat a `light` en `@media print`.
   - El full d'estils base s'anomena `css/theme.css` (en lloc de `tokens.css`) perquè el patró `*token*` de `.gitignore_global` no l'exclogui en fer `git add`.
+  - Els recursos CSS/JS a `index.html` inclouen versió de caché (`?v=1.2`) i el diàleg del darrer trofeu blinda el pas a `#view-assembly` tant en `close` com en `submit`.
 
 ---
 

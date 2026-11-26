@@ -36,7 +36,8 @@ for (const ref of localRefs) {
 const assetRefs = [...html.matchAll(/(?:href|src)="(css\/[^"]+|js\/[^"]+)"/g)].map((m) => m[1]);
 assert(assetRefs.length >= 15, 'Nombre inesperat de referències locals');
 for (const rel of assetRefs) {
-  const full = path.join(ROOT, rel);
+  const cleanRel = rel.split('?')[0];
+  const full = path.join(ROOT, cleanRel);
   assert(fs.existsSync(full), 'Fitxer referenciat no trobat: ' + rel);
 }
 

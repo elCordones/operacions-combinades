@@ -19,24 +19,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/print.css" media="print">
+  <link rel="stylesheet" href="css/theme.css?v=1.2">
+  <link rel="stylesheet" href="css/layout.css?v=1.2">
+  <link rel="stylesheet" href="css/components.css?v=1.2">
+  <link rel="stylesheet" href="css/print.css?v=1.2" media="print">
 
-  <script defer src="js/math/ast.js"></script>
-  <script defer src="js/math/generator.js"></script>
-  <script defer src="js/math/hints.js"></script>
-  <script defer src="js/themes.js"></script>
-  <script defer src="js/state/continuum.js"></script>
-  <script defer src="js/state/session.js"></script>
-  <script defer src="js/ui/sound.js"></script>
-  <script defer src="js/ui/continuumView.js"></script>
-  <script defer src="js/ui/setupView.js"></script>
-  <script defer src="js/ui/gameView.js"></script>
-  <script defer src="js/ui/assemblyView.js"></script>
-  <script defer src="js/ui/reportView.js"></script>
-  <script defer src="js/main.js"></script>
+  <script defer src="js/math/ast.js?v=1.2"></script>
+  <script defer src="js/math/generator.js?v=1.2"></script>
+  <script defer src="js/math/hints.js?v=1.2"></script>
+  <script defer src="js/themes.js?v=1.2"></script>
+  <script defer src="js/state/continuum.js?v=1.2"></script>
+  <script defer src="js/state/session.js?v=1.2"></script>
+  <script defer src="js/ui/sound.js?v=1.2"></script>
+  <script defer src="js/ui/continuumView.js?v=1.2"></script>
+  <script defer src="js/ui/setupView.js?v=1.2"></script>
+  <script defer src="js/ui/gameView.js?v=1.2"></script>
+  <script defer src="js/ui/assemblyView.js?v=1.2"></script>
+  <script defer src="js/ui/reportView.js?v=1.2"></script>
+  <script defer src="js/main.js?v=1.2"></script>
 </head>
 <body>
   <a class="skip-link" href="#app-main">Salta al contingut principal</a>
@@ -516,8 +516,8 @@
       <span class="pill pill-accent">Trofeu desbloquejat!</span>
       <h2 id="trophy-modal-title">Nom del trofeu</h2>
       <p id="trophy-modal-desc"></p>
-      <form method="dialog" class="dialog-actions">
-        <button type="submit" class="btn btn-primary btn-lg" autofocus>Continua!</button>
+      <form id="trophy-modal-form" method="dialog" class="dialog-actions">
+        <button type="submit" id="btn-trophy-continue" class="btn btn-primary btn-lg" autofocus>Continua!</button>
       </form>
     </div>
   </dialog>
