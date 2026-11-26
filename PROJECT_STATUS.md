@@ -24,10 +24,12 @@
   - `js/math/ast.js`: Representació en arbre sintàctic abstracte (AST), avaluació i reducció pas a pas.
   - `js/math/generator.js`: Generador procedimental d'expressions amb invariants estrictes de Primària.
   - `js/math/hints.js`: Classificador d'errors (jerarquia vs. càlcul vs. ordre) i generador de pistes formatives.
+  - `js/math/reasoning.js`: Generador i avaluador per als modes de raonament (*Col·loca els parèntesis* i *Detecta l'error*).
   - `js/state/continuum.js`: Model del Contínuum de Coneixement (6 eixos, mitjana mòbil i estadis competencials).
   - `js/state/session.js`: Gestió de l'estat de partida, progrés de reptes, historial i `localStorage`.
   - `js/ui/setupView.js`: Pantalla inicial de selecció de curs/mode, personalització i temàtica.
   - `js/ui/gameView.js`: Tauler de resolució pas a pas en cascada i guia ràpida DUA.
+  - `js/ui/reasoningView.js`: Tauler interactiu per als modes *Col·loca els parèntesis* i *Detecta l'error*.
   - `js/ui/assemblyView.js`: Activitat final de muntatge tipus trencaclosques amb micro-repàs de jerarquia.
   - `js/ui/continuumView.js`: Finestreta lateral/desplegable del Contínuum en temps real.
   - `js/ui/reportView.js`: Resum final formatiu, vitrina de trofeus, entrenament dirigit i impressió PDF.
@@ -90,23 +92,23 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
 
 ## 3. Estat Actual i Punt de Control (Darrera sessió: 2026-11-26)
 
-- **Estat general**: V1.1 funcional amb mode clar/fosc/dispositiu (`light-dark()`), peu de pàgina compacte i mecànica pas a pas validada al navegador real (Chrome headless) i amb bateria automatitzada.
+- **Estat general**: V2.0 funcional amb 3 modalitats d'activitat (*Cascada guiada*, *Col·loca els parèntesis*, *Detecta l'error*), muntatge final tipus trencaclosques, enllaç docent preconfigurat per URL, mode clar/fosc/dispositiu i peu compacte.
 - **Funcionalitats completades**:
   - [x] Definició tecnopedagògica completa (5 temàtiques, progressió 5è/6è/Personalitzat, mecànica pas a pas en cascada, Contínuum en 6 eixos i informe formatiu).
-  - [x] Motor matemàtic AST (`js/math/ast.js`), generador procedimental amb invariants de Primària (`js/math/generator.js`) i diagnòstic formatiu de pistes (`js/math/hints.js`).
-  - [x] Model del Contínuum amb mitjana mòbil ponderada (`js/state/continuum.js`), gestió de sessió amb `localStorage` (`js/state/session.js`) i 5 temàtiques amb trofeus SVG (`js/themes.js`).
+  - [x] Motor matemàtic AST (`js/math/ast.js`), generador procedimental amb invariants de Primària (`js/math/generator.js`), diagnòstic formatiu de pistes (`js/math/hints.js`) i motor de raonament (`js/math/reasoning.js`).
+  - [x] Model del Contínuum amb mitjana mòbil ponderada (`js/state/continuum.js`), gestió de sessió amb `localStorage` i paràmetres d'URL compartibles (`js/state/session.js`) i 5 temàtiques amb trofeus i plànols SVG (`js/themes.js`).
   - [x] Interfície web responsive i accessible (`index.html`, `css/theme.css`, `css/layout.css`, `css/components.css`, `css/print.css`) amb guia ràpida `<dialog>`, panell mòbil del Contínuum en `<dialog>` natiu, selector d'aparença **Clar / Fosc / Dispositiu** (`color-scheme` + `light-dark()` amb persistència a `localStorage` i script anti-FOUC), diàleg de trofeu, control de so amb icones SVG i peu de llicències compacte (`© David Cordones · 2026`, AGPL v3 + CC BY-SA 4.0).
-  - [x] Controladors de vistes (`setupView.js`, `gameView.js`, `assemblyView.js`, `continuumView.js`, `reportView.js`, `sound.js`, `main.js`) incloent-hi el **Muntatge Final Interactiu** (recompensa lúdica + micro-repàs), *Entrenament Dirigit*, autoavaluació metacognitiva, historial desplegable `<details>` i impressió PDF (sempre en mode clar).
-  - [x] Bateria automatitzada (`tests/verify-v1.js`) i proves E2E en Chrome headless: sintaxi JS vàlida, 1.380 exercicis generats i resolts en cascada, regressió d'IDs/saneig de `localStorage`, flux complet al DOM sense errors de consola, validació dels 3 modes d'aparença, peu de pàgina compacte (~41 px), muntatge final en 6è i 5è i disseny responsive en escriptori (`1280×980`) i mòbil (`390×844`).
+  - [x] Controladors de vistes (`setupView.js`, `gameView.js`, `reasoningView.js`, `assemblyView.js`, `continuumView.js`, `reportView.js`, `sound.js`, `main.js`) incloent-hi **Enllaç preconfigurat docent**, **Col·loca els parèntesis**, **Detecta l'error**, **Muntatge Final Interactiu**, *Entrenament Dirigit*, autoavaluació metacognitiva, historial desplegable `<details>` i impressió PDF (sempre en mode clar).
+  - [x] Bateria automatitzada (`tests/verify-v1.js`) i proves E2E en Chrome headless: sintaxi JS vàlida, 1.380 exercicis en cascada + 420 reptes de raonament validats, regressió d'IDs/saneig de `localStorage`, enllaç preconfigurat URL, flux complet al DOM sense errors de consola, modes d'aparença, muntatge final i disseny responsive en escriptori (`1280×980`) i mòbil (`390×844`).
 - **Punt exacte on ens hem quedat**:
-  - S'ha implementat l'activitat final de muntatge tipus trencaclosques per a les 5 temàtiques (`view-assembly` + `assemblyView.js`) amb doble interacció (clic/teclat i arrossegament per punter), ranures preinstal·lades en 5è/Personalitzat, element final integrat a l'informe i desplegament a GitHub Pages (`https://elcordones.github.io/operacions-combinades/`).
+  - S'han implementat l'enllaç preconfigurat docent (`?curs=&tema=&mode=&ex=&ops=&auto=`) amb botó *"Copiar enllaç per a la classe"* i els dos nous modes de raonament (*Col·loca els parèntesis* i *Detecta l'error*), publicats a GitHub Pages (`https://elcordones.github.io/operacions-combinades/`).
 - **Decisions tècniques i incidències conegudes**:
   - Arquitectura 100% *client-side* basada en IIFEs sota l'espai de noms compartit `globalThis.OpComb` (carregats amb `<script defer>`), compatible tant amb doble clic sobre `index.html` (`file://`) com amb servidor web.
   - `AST.clone(node)` ara preserva `node.id`, i `Session` centralitza la inicialització d'exercicis a `createExerciseState` garantint IDs vàlids des del primer moment.
   - `navigateTo()` protegeix `document.startViewTransition` quan `document.hidden` és cert o la transició s'avorta (`InvalidStateError`) per evitar promeses rebutjades sense capturar.
   - Mode d'aparença implementat amb primitives Baseline (`<meta name="color-scheme" content="light dark">`, `color-scheme` i `light-dark()`) i forçat a `light` en `@media print`.
   - El full d'estils base s'anomena `css/theme.css` (en lloc de `tokens.css`) perquè el patró `*token*` de `.gitignore_global` no l'exclogui en fer `git add`.
-  - Els recursos CSS/JS a `index.html` inclouen versió de caché (`?v=1.2`) i el diàleg del darrer trofeu blinda el pas a `#view-assembly` tant en `close` com en `submit`.
+  - Els recursos CSS/JS a `index.html` inclouen versió de caché (`?v=1.3`) i el diàleg del darrer trofeu blinda el pas a `#view-assembly` tant en `close` com en `submit`.
 
 ---
 
@@ -121,8 +123,18 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - [x] Implementar `js/ui/{setupView,gameView,continuumView,sound}.js` i `js/main.js`.
 - **Fase 4 — Informe formatiu final, entrenament dirigit i impressió PDF**:
   - [x] Implementar `js/ui/reportView.js` i `css/print.css`.
-- **Fase 5 — Validació al navegador i refinament (V1.1 / V2)**:
+- **Fase 5 — Validació, muntatge final i reptes competencials (V2.0)**:
   - [x] Provar i corregir la V1 al navegador (escriptori 1280px, mòbil 390px, flux interactiu pas a pas i diàlegs).
   - [x] Publicar el repositori a GitHub i activar GitHub Pages (`https://elcordones.github.io/operacions-combinades/`).
+  - [x] Afegir activitat final de muntatge tipus trencaclosques (`assemblyView.js`) per a les 5 temàtiques.
+  - [x] Implementar enllaç preconfigurat per al docent (`?curs=...&tema=...&mode=...&ops=...`) i botó *"Copiar enllaç per a la classe"*.
+  - [x] Implementar els modes de raonament *«Col·loca els parèntesis»* i *«Detecta l'error»* (`js/math/reasoning.js` + `js/ui/reasoningView.js`).
+- **Fase 6 — Backlog i millores futures (V2.1 / V3)**:
   - [ ] Prova real a l'aula / impressió PDF en paper i recollida de feedback docent.
-  - [ ] Valorar millores per a V1.1: nous tipus de repte crític (*"Detecta l'error"* o *"Col·loca el parèntesi"*), animació de confeti discreta respectant `prefers-reduced-motion` i exportació/importació JSON de sessió.
+  - [ ] **Mini-problemes contextualitzats**: situació breu d'aula on triar l'expressió combinada correcta entre 3 opcions abans de resoldre-la pas a pas.
+  - [ ] **Teclat numèric integrat en pantalla**: activable o automàtic en PDI/tauleta perquè el teclat virtual del sistema no tapi l'expressió al Pas 2.
+  - [ ] **Lectura en veu alta de pistes (DUA)**: síntesi de veu en català (`Web Speech API ca-ES`) opcional a les pistes formatives i guia ràpida.
+  - [ ] **Mode Pissarra Digital (PDI)**: ampliació de tipografia i vista neta d'exemple per a explicacions en gran grup.
+  - [ ] **Àlbum / Col·lecció global dels 5 elements finals**: vitrina persistent a `localStorage` a la pantalla d'inici (*Nau*, *Fórmula*, *Temple*, *Robot*, *Piràmide*).
+  - [ ] **Exportació i importació de sessió (`.json`)**: per continuar partides entre Chromebooks o desar còpies d'informe.
+  - [ ] **Celebració visual discreta**: animació de confeti lleugera en completar el muntatge final respectant `prefers-reduced-motion`.

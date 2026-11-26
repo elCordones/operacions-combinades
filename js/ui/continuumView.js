@@ -37,6 +37,7 @@
   function renderAll(continuumState, pulsedAxes) {
     const snapshot = Continuum.getSnapshot(continuumState);
     renderInto(document.getElementById('continuum-list-desktop'), snapshot, pulsedAxes);
+    renderInto(document.getElementById('continuum-list-reasoning'), snapshot, pulsedAxes);
     renderInto(document.getElementById('continuum-list-mobile'), snapshot, pulsedAxes);
     return snapshot;
   }

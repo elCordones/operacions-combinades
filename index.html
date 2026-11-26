@@ -19,24 +19,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/theme.css?v=1.2">
-  <link rel="stylesheet" href="css/layout.css?v=1.2">
-  <link rel="stylesheet" href="css/components.css?v=1.2">
-  <link rel="stylesheet" href="css/print.css?v=1.2" media="print">
+  <link rel="stylesheet" href="css/theme.css?v=1.3">
+  <link rel="stylesheet" href="css/layout.css?v=1.3">
+  <link rel="stylesheet" href="css/components.css?v=1.3">
+  <link rel="stylesheet" href="css/print.css?v=1.3" media="print">
 
-  <script defer src="js/math/ast.js?v=1.2"></script>
-  <script defer src="js/math/generator.js?v=1.2"></script>
-  <script defer src="js/math/hints.js?v=1.2"></script>
-  <script defer src="js/themes.js?v=1.2"></script>
-  <script defer src="js/state/continuum.js?v=1.2"></script>
-  <script defer src="js/state/session.js?v=1.2"></script>
-  <script defer src="js/ui/sound.js?v=1.2"></script>
-  <script defer src="js/ui/continuumView.js?v=1.2"></script>
-  <script defer src="js/ui/setupView.js?v=1.2"></script>
-  <script defer src="js/ui/gameView.js?v=1.2"></script>
-  <script defer src="js/ui/assemblyView.js?v=1.2"></script>
-  <script defer src="js/ui/reportView.js?v=1.2"></script>
-  <script defer src="js/main.js?v=1.2"></script>
+  <script defer src="js/math/ast.js?v=1.3"></script>
+  <script defer src="js/math/generator.js?v=1.3"></script>
+  <script defer src="js/math/hints.js?v=1.3"></script>
+  <script defer src="js/math/reasoning.js?v=1.3"></script>
+  <script defer src="js/themes.js?v=1.3"></script>
+  <script defer src="js/state/continuum.js?v=1.3"></script>
+  <script defer src="js/state/session.js?v=1.3"></script>
+  <script defer src="js/ui/sound.js?v=1.3"></script>
+  <script defer src="js/ui/continuumView.js?v=1.3"></script>
+  <script defer src="js/ui/setupView.js?v=1.3"></script>
+  <script defer src="js/ui/gameView.js?v=1.3"></script>
+  <script defer src="js/ui/reasoningView.js?v=1.3"></script>
+  <script defer src="js/ui/assemblyView.js?v=1.3"></script>
+  <script defer src="js/ui/reportView.js?v=1.3"></script>
+  <script defer src="js/main.js?v=1.3"></script>
 </head>
 <body>
   <a class="skip-link" href="#app-main">Salta al contingut principal</a>
@@ -127,6 +129,13 @@
         <p class="lead">Tria el teu curs, selecciona una temàtica de trofeus i resol cada repte pas a pas tot observant com creix el teu <strong>Contínuum de Coneixement</strong>.</p>
       </div>
 
+      <div id="shared-config-banner" class="banner banner-info" hidden>
+        <div class="banner-body">
+          <strong>Configuració precarregada per al grup!</strong>
+          <span>Aquest enllaç ja té triat el curs, el mode i la temàtica. Prem «Començar l’aventura» quan estiguis a punt.</span>
+        </div>
+      </div>
+
       <div id="resume-banner" class="banner banner-info" hidden>
         <div class="banner-body">
           <strong>Tens una sessió en curs guardada!</strong>
@@ -184,7 +193,31 @@
             </div>
           </div>
 
-          <div class="length-selector">
+          <div class="activity-mode-block">
+            <span class="field-label" id="activity-mode-label">Tipus d’activitat:</span>
+            <div class="mode-cards" role="radiogroup" aria-labelledby="activity-mode-label">
+              <label class="choice-card choice-card-compact">
+                <input type="radio" name="activityMode" value="cascada" checked>
+                <span class="choice-badge">Pas a pas</span>
+                <span class="choice-title">Cascada guiada</span>
+                <span class="choice-desc">Resol operacions completes clicant la prioritat i calculant pas a pas fins al muntatge final.</span>
+              </label>
+              <label class="choice-card choice-card-compact">
+                <input type="radio" name="activityMode" value="parentesis">
+                <span class="choice-badge">( )</span>
+                <span class="choice-title">Col·loca els parèntesis</span>
+                <span class="choice-desc">6 reptes de raonament: posa «( )» al lloc exacte perquè la igualtat sigui certa.</span>
+              </label>
+              <label class="choice-card choice-card-compact">
+                <input type="radio" name="activityMode" value="error">
+                <span class="choice-badge">🔍</span>
+                <span class="choice-title">Detecta l’error</span>
+                <span class="choice-desc">6 reptes d’anàlisi: descobreix en quina línia hi ha un error típic i explica per què.</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="ex-count-wrap" class="length-selector">
             <span class="field-label" id="ex-count-label">Exercicis per repte:</span>
             <div class="segmented" role="radiogroup" aria-labelledby="ex-count-label">
               <label class="seg-option">
@@ -209,6 +242,19 @@
         </section>
 
         <div class="setup-cta">
+          <div class="share-cta-wrap">
+            <button type="button" id="btn-copy-share-link" class="btn btn-secondary">
+              <span class="btn-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+              </span>
+              Copiar enllaç per a la classe
+            </button>
+            <span id="share-link-status" class="share-status" role="status" aria-live="polite"></span>
+          </div>
+
           <button type="submit" id="btn-start-game" class="btn btn-primary btn-lg">
             Començar l’aventura <span aria-hidden="true">→</span>
           </button>
@@ -373,6 +419,99 @@
             Veure el meu informe formatiu →
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- VISTA 2C: REPTES DE RAONAMENT (PARÈNTESIS / DETECTA L'ERROR) -->
+    <section id="view-reasoning" class="view-section" aria-labelledby="reasoning-title" hidden>
+      <div class="game-layout">
+        <div class="game-main">
+          <div class="card challenge-header-card">
+            <div class="challenge-meta">
+              <div class="challenge-badges">
+                <span id="reasoning-theme-pill" class="pill pill-accent"></span>
+                <span id="reasoning-progress-pill" class="pill">Repte 1 de 6</span>
+                <span id="reasoning-mode-pill" class="pill pill-warn"></span>
+              </div>
+              <h1 id="reasoning-title" class="challenge-title" tabindex="-1">Raonament matemàtic</h1>
+              <p id="reasoning-subtitle" class="challenge-focus"></p>
+            </div>
+            <div class="challenge-actions-top">
+              <button type="button" id="btn-reasoning-mobile-continuum" class="btn btn-secondary btn-sm mobile-only">
+                <span class="btn-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 20V10M10 20V4M16 20v-7M22 20v-4"/>
+                  </svg>
+                </span>
+                El meu Contínuum
+              </button>
+              <button type="button" id="btn-reasoning-finish" class="btn btn-ghost btn-sm">
+                Veure informe final
+              </button>
+            </div>
+          </div>
+
+          <div class="card notebook-card">
+            <div class="notebook-head">
+              <h2 class="notebook-title">Activitat de raonament</h2>
+              <span id="reasoning-dots" class="exercise-dots" aria-live="polite"></span>
+            </div>
+
+            <!-- Submode A: Col·loca els parèntesis -->
+            <div id="reasoning-paren-panel" class="reasoning-panel" hidden>
+              <div id="reasoning-paren-expr" class="reasoning-expr-bar" role="group" aria-label="Expressió per col·locar parèntesis"></div>
+              <div class="reasoning-actions">
+                <button type="button" id="btn-paren-check" class="btn btn-primary" disabled>Comprova</button>
+                <button type="button" id="btn-paren-clear" class="btn btn-ghost btn-sm" disabled>Neteja ( )</button>
+              </div>
+            </div>
+
+            <!-- Submode B: Detecta l'error -->
+            <div id="reasoning-error-panel" class="reasoning-panel" hidden>
+              <div class="cascade-line reasoning-initial-line">
+                <span id="reasoning-error-initial"></span>
+                <span class="cascade-line-note">Expressió inicial</span>
+              </div>
+              <div id="reasoning-error-steps" class="error-steps-list" role="group" aria-label="Passos resolts per revisar"></div>
+
+              <div id="reasoning-error-options-wrap" class="reasoning-options-wrap" hidden>
+                <p class="field-label">Per què és incorrecte aquest pas?</p>
+                <div id="reasoning-error-options" class="reasoning-options-list"></div>
+              </div>
+
+              <div id="reasoning-corrected-box" class="corrected-cascade-box" hidden>
+                <strong>Resolució correcta pas a pas:</strong>
+                <div id="reasoning-corrected-steps" class="history-steps"></div>
+              </div>
+            </div>
+
+            <div id="reasoning-feedback" class="feedback-box is-guide" role="status" aria-live="polite" hidden>
+              <span id="reasoning-feedback-icon" class="feedback-icon" aria-hidden="true">🧠</span>
+              <div class="feedback-text">
+                <strong id="reasoning-feedback-title"></strong>
+                <p id="reasoning-feedback-message"></p>
+              </div>
+            </div>
+
+            <div id="reasoning-done-bar" class="exercise-done-bar" hidden>
+              <div class="done-summary">
+                <span class="done-check" aria-hidden="true">✅</span>
+                <span id="reasoning-done-message">Molt ben raonat!</span>
+              </div>
+              <button type="button" id="btn-reasoning-next" class="btn btn-primary">Següent repte →</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="continuum-aside" aria-label="Contínuum de Coneixement">
+          <div class="card continuum-card">
+            <div class="continuum-head">
+              <h2>Contínuum de Coneixement</h2>
+              <p class="continuum-sub">Mostra com evoluciona cada habilitat amb els teus darrers passos.</p>
+            </div>
+            <div id="continuum-list-reasoning" class="continuum-list"></div>
+          </div>
+        </aside>
       </div>
     </section>
 

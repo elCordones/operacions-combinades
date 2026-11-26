@@ -501,9 +501,42 @@
     color: var(--text-secondary);
   }
 
+  .activity-mode-block {
+    margin-block-start: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .mode-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .choice-card-compact {
+    padding: var(--space-3) var(--space-4);
+  }
+
   .setup-cta {
     display: flex;
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .share-cta-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .share-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-primary);
   }
 
   /* Capçalera de repte i vitrina */
@@ -1753,6 +1786,194 @@
       font-size: 0.65rem;
       padding: 0.05rem 0.3rem;
     }
+  }
+
+  /* Reptes de raonament: Col·loca els parèntesis i Detecta l'error */
+  .reasoning-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .reasoning-expr-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-elevated);
+    border: 2px solid var(--accent-primary);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3cqi, 1.85rem);
+    font-weight: 700;
+  }
+
+  .term-btn {
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border-strong);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-size: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .term-btn:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-text);
+  }
+
+  .term-btn.is-start-term {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-text);
+  }
+
+  .term-btn.is-grouped {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-text);
+  }
+
+  .term-btn:focus-visible,
+  .err-step-btn:focus-visible,
+  .reason-choice-btn:focus-visible {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+
+  .paren-token {
+    font-family: var(--font-display);
+    font-size: 1.25em;
+    font-weight: 800;
+    color: var(--accent-primary);
+    padding-inline: 0.08rem;
+  }
+
+  .paren-token.is-pending {
+    color: var(--warn-border);
+  }
+
+  .target-equals {
+    margin-inline-start: 0.35rem;
+    color: var(--text-secondary);
+  }
+
+  .target-equals strong {
+    color: var(--accent-primary);
+  }
+
+  .reasoning-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .reasoning-initial-line {
+    background-color: var(--bg-subtle);
+  }
+
+  .error-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .err-step-btn {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-default);
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: start;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .err-step-btn:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+  }
+
+  .err-step-btn.is-bug-found {
+    border-color: var(--warn-border);
+    background-color: var(--warn-bg);
+    color: var(--warn-text);
+  }
+
+  .reasoning-options-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .reasoning-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .reason-choice-btn {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-default);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.94rem;
+    text-align: start;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .reason-choice-btn:hover {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-text);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .err-step-btn.is-error-shake,
+    .reason-choice-btn.is-error-shake {
+      animation: op-shake 0.32s ease;
+    }
+  }
+
+  .err-step-btn.is-error-shake,
+  .reason-choice-btn.is-error-shake {
+    border-color: var(--warn-border);
+    background-color: var(--warn-bg);
+  }
+
+  .corrected-cascade-box {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--success-border);
+    background-color: var(--success-bg);
+    color: var(--success-text);
+  }
+
+  .corrected-cascade-box .history-steps {
+    border-block-start-color: var(--success-border);
   }
 
   /* Peu de pàgina obligatori compacte (apps-escolars) */

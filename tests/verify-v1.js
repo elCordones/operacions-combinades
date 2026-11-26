@@ -10,11 +10,12 @@ const ROOT = path.resolve(__dirname, '..');
 require(path.join(ROOT, 'js/math/ast.js'));
 require(path.join(ROOT, 'js/math/generator.js'));
 require(path.join(ROOT, 'js/math/hints.js'));
+require(path.join(ROOT, 'js/math/reasoning.js'));
 require(path.join(ROOT, 'js/themes.js'));
 require(path.join(ROOT, 'js/state/continuum.js'));
 require(path.join(ROOT, 'js/state/session.js'));
 
-const { AST, Generator, Hints, Themes, Continuum, Session } = globalThis.OpComb;
+const { AST, Generator, Hints, Reasoning, Themes, Continuum, Session } = globalThis.OpComb;
 
 console.log('1. Comprovant integritat d’index.html i peu de pàgina obligatori...');
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -269,6 +270,75 @@ console.log('7. Comprovant saneig de localStorage antic, dobles parèntesis i pa
   assert(valid.has(rightId), 'Ha d’acceptar (9 − 5)');
   assert(!valid.has(mulId), 'No pot acceptar × abans dels parèntesis');
   assert(!valid.has(sqrtId), 'No pot acceptar √36 abans dels parèntesis');
+}
+
+console.log('8. Comprovant enllaç preconfigurat docent (URL) i modes de raonament (200+200 reptes)...');
+{
+  const cfg = {
+    course: 'custom',
+    themeId: 'codi',
+    mode: 'parentesis',
+    exercisesPerChallenge: 4,
+    customOps: { mult_div: true, parentesis: true, potencies: false, arrels: false }
+  };
+  const urlStr = Session.buildShareUrl('https://elcordones.github.io/operacions-combinades/index.html', cfg);
+  const parsed = Session.parseUrlConfig(new URL(urlStr).search);
+  assert(parsed, 'parseUrlConfig ha de llegir la URL generada');
+  assert.strictEqual(parsed.course, 'custom');
+  assert.strictEqual(parsed.themeId, 'codi');
+  assert.strictEqual(parsed.mode, 'parentesis');
+  assert.strictEqual(parsed.customOps.mult_div, true);
+  assert.strictEqual(parsed.customOps.potencies, false);
+  assert.strictEqual(Session.parseUrlConfig(''), null);
+
+  const testConfigs = [
+    { course: '5e', themeId: 'cosmos', mode: 'parentesis' },
+    { course: '6e', themeId: 'lab', mode: 'parentesis' },
+    { course: 'custom', themeId: 'classic', mode: 'parentesis', customOps: { mult_div: false, parentesis: true, potencies: false, arrels: false } }
+  ];
+  let parenCount = 0;
+  for (const c of testConfigs) {
+    const seen = new Set();
+    for (let i = 0; i < 70; i++) {
+      const p = Reasoning.generateParenPuzzle(c, seen);
+      assert.notStrictEqual(p.valNoParens, p.target, 'El resultat sense parèntesis ha de diferir de target');
+      assert.strictEqual(
+        Reasoning.evaluateFlatWithParens(p.terms, p.ops, p.solution[0], p.solution[1]),
+        p.target,
+        'La solució ha d’avaluar exactament a target'
+      );
+      parenCount++;
+    }
+  }
+
+  let errCount = 0;
+  for (const c of testConfigs) {
+    const seen = new Set();
+    for (let i = 0; i < 70; i++) {
+      const e = Reasoning.generateErrorPuzzle(c, seen);
+      assert.notStrictEqual(e.wrongFinal, e.correctFinal, 'El resultat erroni ha de diferir del correcte');
+      assert.strictEqual(e.options.length, 3, 'Calen 3 opcions');
+      assert.strictEqual(e.options.filter((o) => o.isCorrect).length, 1, 'Exactament 1 opció correcta');
+      assert(e.bugStepIdx >= 0 && e.bugStepIdx < e.buggySteps.length);
+      errCount++;
+    }
+  }
+
+  // Persistència sessió de raonament
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem: (k) => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => store.set(k, String(v)),
+    removeItem: (k) => store.delete(k)
+  };
+  const rSess = Session.createReasoningSession({ course: '6e', themeId: 'expedicio', mode: 'error' });
+  assert.strictEqual(rSess.reasoning.exercises.length, 6);
+  Session.saveSession(rSess);
+  const rLoaded = Session.loadSession();
+  assert(rLoaded && rLoaded.mode === 'error' && rLoaded.reasoning.exercises.length === 6);
+  delete globalThis.localStorage;
+
+  console.log(`   -> ${parenCount} reptes de parèntesis i ${errCount} de detecció d’errors validats!`);
 }
 
 console.log('TOTES LES PROVES DE V1 HAN PASSAT CORRECTAMENT!');

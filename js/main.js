@@ -6,6 +6,7 @@
   const Sound = OpComb.Sound;
   const SetupView = OpComb.SetupView;
   const GameView = OpComb.GameView;
+  const ReasoningView = OpComb.ReasoningView;
   const AssemblyView = OpComb.AssemblyView;
   const ReportView = OpComb.ReportView;
 
@@ -31,6 +32,7 @@
 
     const viewSetup = document.getElementById('view-setup');
     const viewGame = document.getElementById('view-game');
+    const viewReasoning = document.getElementById('view-reasoning');
     const viewAssembly = document.getElementById('view-assembly');
     const viewReport = document.getElementById('view-report');
     const btnGoSetup = document.getElementById('btn-go-setup');
@@ -89,6 +91,7 @@
     function applyViewSwitch(viewName) {
       viewSetup.hidden = viewName !== 'setup';
       viewGame.hidden = viewName !== 'game';
+      if (viewReasoning) viewReasoning.hidden = viewName !== 'reasoning';
       if (viewAssembly) viewAssembly.hidden = viewName !== 'assembly';
       viewReport.hidden = viewName !== 'report';
       btnGoSetup.hidden = viewName === 'setup';
@@ -97,6 +100,7 @@
 
     function getHeadingForView(viewName) {
       if (viewName === 'game') return document.getElementById('game-challenge-title');
+      if (viewName === 'reasoning') return document.getElementById('reasoning-title');
       if (viewName === 'assembly') return document.getElementById('assembly-heading');
       if (viewName === 'report') return document.getElementById('report-heading');
       return document.getElementById('setup-heading');
@@ -118,6 +122,16 @@
           getHeadingForView(viewName)?.focus();
         });
     }
+
+    const reasoningView = ReasoningView.init({
+      onGoReport: () => {
+        reportView.render(activeSession);
+        navigateTo('report');
+      },
+      onOpenMobileContinuum: () => {
+        if (drawer && !drawer.open) drawer.showModal();
+      }
+    });
 
     const assemblyView = AssemblyView.init({
       onGoReport: () => {
@@ -162,13 +176,22 @@
       }
     });
 
-    const setupView = SetupView.init({
-      onStart: (config) => {
+    function startSessionFromConfig(config) {
+      if (config.mode === 'parentesis' || config.mode === 'error') {
+        activeSession = Session.createReasoningSession(config);
+        Session.saveSession(activeSession);
+        reasoningView.render(activeSession);
+        navigateTo('reasoning');
+      } else {
         activeSession = Session.createSession(config);
         Session.saveSession(activeSession);
         gameView.render(activeSession);
         navigateTo('game');
-      },
+      }
+    }
+
+    const setupView = SetupView.init({
+      onStart: startSessionFromConfig,
       onResume: () => {
         const saved = Session.loadSession();
         if (!saved) return;
@@ -179,6 +202,9 @@
         } else if (activeSession.view === 'assembly') {
           assemblyView.render(activeSession);
           navigateTo('assembly');
+        } else if (activeSession.view === 'reasoning' || activeSession.mode === 'parentesis' || activeSession.mode === 'error') {
+          reasoningView.render(activeSession);
+          navigateTo('reasoning');
         } else {
           gameView.render(activeSession);
           navigateTo('game');
@@ -226,5 +252,13 @@
     applyColorMode(initialColorMode, false);
     syncSoundButton();
     setupView.refreshResumeBanner(Session.loadSession());
+
+    const urlConfig = Session.parseUrlConfig(global.location && global.location.search);
+    if (urlConfig) {
+      setupView.applyConfig(urlConfig, true);
+      if (urlConfig.auto) {
+        startSessionFromConfig(urlConfig);
+      }
+    }
   });
 })(typeof globalThis !== 'undefined' ? globalThis : window);

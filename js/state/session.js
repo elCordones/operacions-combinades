@@ -4,9 +4,118 @@
   const OpComb = (global.OpComb = global.OpComb || {});
   const AST = OpComb.AST;
   const Generator = OpComb.Generator;
+  const Reasoning = OpComb.Reasoning;
   const Continuum = OpComb.Continuum;
 
   const STORAGE_KEY = 'opcomb_v1_session';
+  const VALID_COURSES = new Set(['5e', '6e', 'custom']);
+  const VALID_THEMES = new Set(['cosmos', 'lab', 'expedicio', 'codi', 'classic']);
+  const VALID_MODES = new Set(['cascada', 'parentesis', 'error']);
+
+  function normalizeConfig(config) {
+    const course = VALID_COURSES.has(config && config.course) ? config.course : '6e';
+    const themeId = VALID_THEMES.has(config && config.themeId) ? config.themeId : 'cosmos';
+    const mode = VALID_MODES.has(config && config.mode) ? config.mode : 'cascada';
+    const exNum = Number(config && config.exercisesPerChallenge);
+    const exercisesPerChallenge = Number.isInteger(exNum) && exNum >= 1 && exNum <= 10 ? exNum : 3;
+
+    let customOps;
+    if (course === '6e') {
+      customOps = { mult_div: true, parentesis: true, potencies: true, arrels: true };
+    } else if (course === '5e') {
+      customOps = {
+        mult_div: true,
+        parentesis: true,
+        potencies: true,
+        arrels: Boolean(config && config.customOps && config.customOps.arrels)
+      };
+    } else {
+      customOps = Object.assign(
+        { mult_div: true, parentesis: true, potencies: true, arrels: true },
+        (config && config.customOps) || {}
+      );
+    }
+
+    return {
+      course,
+      themeId,
+      mode,
+      exercisesPerChallenge,
+      customOps
+    };
+  }
+
+  function parseUrlConfig(searchStr) {
+    if (!searchStr || typeof searchStr !== 'string') return null;
+    const params = new URLSearchParams(searchStr);
+    const hasAny = ['curs', 'tema', 'ex', 'mode', 'ops', 'auto'].some((k) => params.has(k));
+    if (!hasAny) return null;
+
+    const rawCourse = params.get('curs');
+    const course = VALID_COURSES.has(rawCourse) ? rawCourse : '6e';
+    const rawTheme = params.get('tema');
+    const themeId = VALID_THEMES.has(rawTheme) ? rawTheme : 'cosmos';
+    const rawMode = params.get('mode');
+    const mode = VALID_MODES.has(rawMode) ? rawMode : 'cascada';
+    const rawEx = Number(params.get('ex'));
+    const exercisesPerChallenge = rawEx === 3 || rawEx === 4 || rawEx === 5 ? rawEx : 3;
+
+    let customOps = {
+      mult_div: true,
+      parentesis: true,
+      potencies: true,
+      arrels: course === '6e'
+    };
+
+    if (params.has('ops')) {
+      const tokens = new Set(
+        params
+          .get('ops')
+          .split(',')
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean)
+      );
+      customOps = {
+        mult_div: tokens.has('md'),
+        parentesis: tokens.has('par'),
+        potencies: tokens.has('pot'),
+        arrels: tokens.has('arr')
+      };
+    }
+
+    const cfg = normalizeConfig({
+      course,
+      themeId,
+      mode,
+      exercisesPerChallenge,
+      customOps
+    });
+    cfg.auto = params.get('auto') === '1' || params.get('auto') === 'true';
+    return cfg;
+  }
+
+  function buildShareUrl(baseHref, config) {
+    const cfg = normalizeConfig(config);
+    const url = new URL(baseHref);
+    url.search = '';
+    url.hash = '';
+    url.searchParams.set('curs', cfg.course);
+    url.searchParams.set('tema', cfg.themeId);
+    if (cfg.mode !== 'cascada') {
+      url.searchParams.set('mode', cfg.mode);
+    } else {
+      url.searchParams.set('ex', String(cfg.exercisesPerChallenge));
+    }
+    if (cfg.course === 'custom') {
+      const opsTokens = [];
+      if (cfg.customOps.mult_div) opsTokens.push('md');
+      if (cfg.customOps.parentesis) opsTokens.push('par');
+      if (cfg.customOps.potencies) opsTokens.push('pot');
+      if (cfg.customOps.arrels) opsTokens.push('arr');
+      url.searchParams.set('ops', opsTokens.join(','));
+    }
+    return url.toString();
+  }
 
   function getActiveAxesForConfig(config) {
     const set = new Set(['jerarquia', 'sum_rest']);
@@ -60,20 +169,7 @@
   }
 
   function createSession(config) {
-    const normalizedConfig = {
-      course: config.course || '6e',
-      themeId: config.themeId || 'cosmos',
-      exercisesPerChallenge: Number(config.exercisesPerChallenge) || 3,
-      customOps: Object.assign(
-        {
-          parentesis: true,
-          potencies: true,
-          arrels: config.course === '6e',
-          mult_div: true
-        },
-        config.customOps || {}
-      )
-    };
+    const normalizedConfig = normalizeConfig(config);
 
     const challenges = Generator.getChallengesForConfig(normalizedConfig);
     const activeAxes = getActiveAxesForConfig(normalizedConfig);
@@ -85,12 +181,58 @@
     return {
       version: 1,
       view: 'game',
+      mode: 'cascada',
       config: normalizedConfig,
       challenges,
       currentChallengeIdx: 0,
       currentExerciseIdx: 0,
       seenExpressions: seen,
       currentExercise: createExerciseState(firstAst),
+      trophies: [],
+      completedExercises: [],
+      errorLog: [],
+      continuum: Continuum.createInitial(activeAxes),
+      reflection: {
+        confidence: null,
+        note: ''
+      },
+      targeted: null,
+      assemblyCompleted: false,
+      assemblyPlaced: [],
+      assemblyOrder: null
+    };
+  }
+
+  function createReasoningSession(config) {
+    const normalizedConfig = normalizeConfig(config);
+    const mode = normalizedConfig.mode === 'error' ? 'error' : 'parentesis';
+    const activeAxes = getActiveAxesForConfig(normalizedConfig);
+    if (mode === 'parentesis') activeAxes.add('parentesis');
+
+    const exercises = Reasoning
+      ? Reasoning.generateReasoningSeries(mode, normalizedConfig, 6)
+      : [];
+
+    return {
+      version: 1,
+      view: 'reasoning',
+      mode,
+      config: normalizedConfig,
+      challenges: [],
+      currentChallengeIdx: 0,
+      currentExerciseIdx: 0,
+      seenExpressions: [],
+      currentExercise: null,
+      reasoning: {
+        mode,
+        exercises,
+        index: 0,
+        completedCurrent: false,
+        hadHintCurrent: false,
+        startTermIdx: null,
+        endTermIdx: null,
+        bugFound: false
+      },
       trophies: [],
       completedExercises: [],
       errorLog: [],
@@ -202,16 +344,22 @@
       const raw = global.localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
       const parsed = JSON.parse(raw);
-      if (!parsed || parsed.version !== 1 || !parsed.currentExercise) return null;
-      if (parsed.currentExercise.initialAst && hasMissingIds(parsed.currentExercise.initialAst)) {
-        parsed.currentExercise.initialAst = AST.assignIds(parsed.currentExercise.initialAst);
-      }
-      if (parsed.currentExercise.currentAst && hasMissingIds(parsed.currentExercise.currentAst)) {
-        parsed.currentExercise.currentAst = AST.assignIds(parsed.currentExercise.currentAst);
-        parsed.currentExercise.selectedNodeId = null;
-      }
-      if (parsed.currentExercise.hierarchyScoredThisStep === undefined) {
-        parsed.currentExercise.hierarchyScoredThisStep = false;
+      if (!parsed || parsed.version !== 1) return null;
+      const isReasoning = parsed.mode === 'parentesis' || parsed.mode === 'error';
+      if (!isReasoning && !parsed.currentExercise) return null;
+      if (isReasoning && (!parsed.reasoning || !Array.isArray(parsed.reasoning.exercises))) return null;
+
+      if (parsed.currentExercise) {
+        if (parsed.currentExercise.initialAst && hasMissingIds(parsed.currentExercise.initialAst)) {
+          parsed.currentExercise.initialAst = AST.assignIds(parsed.currentExercise.initialAst);
+        }
+        if (parsed.currentExercise.currentAst && hasMissingIds(parsed.currentExercise.currentAst)) {
+          parsed.currentExercise.currentAst = AST.assignIds(parsed.currentExercise.currentAst);
+          parsed.currentExercise.selectedNodeId = null;
+        }
+        if (parsed.currentExercise.hierarchyScoredThisStep === undefined) {
+          parsed.currentExercise.hierarchyScoredThisStep = false;
+        }
       }
       parsed.assemblyCompleted = Boolean(parsed.assemblyCompleted);
       parsed.assemblyPlaced = Array.isArray(parsed.assemblyPlaced) ? parsed.assemblyPlaced : [];
@@ -237,7 +385,11 @@
   OpComb.Session = {
     STORAGE_KEY,
     getActiveAxesForConfig,
+    normalizeConfig,
+    parseUrlConfig,
+    buildShareUrl,
     createSession,
+    createReasoningSession,
     startTargetedTraining,
     advanceAfterExerciseComplete,
     saveSession,
