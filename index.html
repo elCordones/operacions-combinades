@@ -34,6 +34,7 @@
   <script defer src="js/ui/continuumView.js"></script>
   <script defer src="js/ui/setupView.js"></script>
   <script defer src="js/ui/gameView.js"></script>
+  <script defer src="js/ui/assemblyView.js"></script>
   <script defer src="js/ui/reportView.js"></script>
   <script defer src="js/main.js"></script>
 </head>
@@ -321,6 +322,60 @@
       </dialog>
     </section>
 
+    <!-- VISTA 2B: MUNTATGE FINAL (RECOMPENSA + MICRO-REPÀS) -->
+    <section id="view-assembly" class="view-section" aria-labelledby="assembly-heading" hidden>
+      <div class="card challenge-header-card assembly-header-card">
+        <div class="challenge-meta">
+          <div class="challenge-badges">
+            <span id="assembly-theme-pill" class="pill pill-accent"></span>
+            <span id="assembly-progress-pill" class="pill">0 de 6 peces muntades</span>
+          </div>
+          <h1 id="assembly-heading" class="challenge-title" tabindex="-1">Munta l’element final!</h1>
+          <p id="assembly-subtitle" class="challenge-focus"></p>
+        </div>
+        <div class="challenge-actions-top">
+          <button type="button" id="btn-skip-assembly" class="btn btn-ghost btn-sm">
+            Saltar i veure l’informe
+          </button>
+        </div>
+      </div>
+
+      <div id="assembly-feedback" class="feedback-box is-guide" role="status" aria-live="polite" hidden>
+        <span id="assembly-feedback-icon" class="feedback-icon" aria-hidden="true">🧩</span>
+        <div class="feedback-text">
+          <strong id="assembly-feedback-title"></strong>
+          <p id="assembly-feedback-message"></p>
+        </div>
+      </div>
+
+      <div class="assembly-layout">
+        <div class="card assembly-stage-card">
+          <h2 class="card-title">Plànol de muntatge</h2>
+          <p class="card-subtitle">Toca una peça de la safata (o arrossega-la) i col·loca-la a la ranura de la seva habilitat.</p>
+          <div class="assembly-stage">
+            <div id="assembly-blueprint" class="assembly-blueprint"></div>
+            <div id="assembly-slots" class="assembly-slots"></div>
+          </div>
+        </div>
+
+        <div id="assembly-tray-card" class="card assembly-tray-card">
+          <h2 class="card-title">Peces aconseguides</h2>
+          <p class="card-subtitle">Cada peça guarda un poder matemàtic de la sessió.</p>
+          <div id="assembly-tray" class="assembly-tray"></div>
+        </div>
+
+        <div id="assembly-complete-card" class="card assembly-complete-card" hidden>
+          <div id="assembly-final-art" class="assembly-final-art"></div>
+          <span class="pill pill-accent">Element final assemblat!</span>
+          <h2 id="assembly-final-name" class="card-title"></h2>
+          <p id="assembly-final-desc" class="lead"></p>
+          <button type="button" id="btn-assembly-go-report" class="btn btn-primary btn-lg">
+            Veure el meu informe formatiu →
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- VISTA 3: INFORME FORMATIU FINAL -->
     <section id="view-report" class="view-section" aria-labelledby="report-heading" hidden>
       <div class="card report-hero-card">
@@ -357,6 +412,7 @@
       <div class="report-grid">
         <section class="card report-card" aria-labelledby="report-trophies-heading">
           <h2 id="report-trophies-heading" class="card-title">Vitrina de trofeus</h2>
+          <div id="report-final-artifact" class="final-artifact-card" hidden></div>
           <div id="report-trophies" class="report-trophies-grid"></div>
         </section>
 

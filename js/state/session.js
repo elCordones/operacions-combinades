@@ -99,7 +99,10 @@
         confidence: null,
         note: ''
       },
-      targeted: null
+      targeted: null,
+      assemblyCompleted: false,
+      assemblyPlaced: [],
+      assemblyOrder: null
     };
   }
 
@@ -168,7 +171,7 @@
 
     const nextChIdx = session.currentChallengeIdx + 1;
     if (nextChIdx >= session.challenges.length) {
-      session.view = 'report';
+      session.view = 'assembly';
       saveSession(session);
       return { event: 'session_done', trophyIdx: earnedIdx };
     }
@@ -209,6 +212,11 @@
       }
       if (parsed.currentExercise.hierarchyScoredThisStep === undefined) {
         parsed.currentExercise.hierarchyScoredThisStep = false;
+      }
+      parsed.assemblyCompleted = Boolean(parsed.assemblyCompleted);
+      parsed.assemblyPlaced = Array.isArray(parsed.assemblyPlaced) ? parsed.assemblyPlaced : [];
+      if (!Array.isArray(parsed.assemblyOrder)) {
+        parsed.assemblyOrder = null;
       }
       return parsed;
     } catch (_err) {

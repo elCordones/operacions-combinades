@@ -11,6 +11,7 @@
   function init(callbacks) {
     const themePill = document.getElementById('report-theme-pill');
     const subtitleEl = document.getElementById('report-subtitle');
+    const finalArtifactEl = document.getElementById('report-final-artifact');
     const trophiesEl = document.getElementById('report-trophies');
     const strengthsList = document.getElementById('report-strengths-list');
     const focusList = document.getElementById('report-focus-list');
@@ -39,6 +40,31 @@
         `Has resolt ${doneCount} ${doneCount === 1 ? 'expressió' : 'expressions'} pas a pas i has aconseguit ${trophyCount} ${trophyCount === 1 ? 'trofeu' : 'trofeus'}.`;
 
       printDateStamp.textContent = new Date().toLocaleDateString('ca-ES');
+
+      // Element final assemblat (si completat o disponible per muntar)
+      if (finalArtifactEl) {
+        if (session.assemblyCompleted && theme.assembly) {
+          finalArtifactEl.hidden = false;
+          finalArtifactEl.innerHTML =
+            `<div class="final-artifact-art">${theme.assembly.finalSvg}</div>` +
+            '<div class="final-artifact-info">' +
+              '<span class="pill pill-accent">Element final assemblat!</span>' +
+              `<strong>${theme.assembly.finalName}</strong>` +
+              `<p>${theme.assembly.finalDesc}</p>` +
+            '</div>';
+        } else if (!session.assemblyCompleted && session.trophies.length >= session.challenges.length && session.challenges.length > 0 && theme.assembly) {
+          finalArtifactEl.hidden = false;
+          finalArtifactEl.innerHTML =
+            '<div class="final-artifact-info">' +
+              '<strong>Tens totes les peces aconseguides!</strong>' +
+              `<p>Encara pots completar el muntatge de «${theme.assembly.finalName}».</p>` +
+            '</div>' +
+            '<button type="button" id="btn-report-go-assembly" class="btn btn-primary btn-sm no-print">Munta l’element final →</button>';
+        } else {
+          finalArtifactEl.hidden = true;
+          finalArtifactEl.innerHTML = '';
+        }
+      }
 
       // Vitrina de trofeus
       trophiesEl.innerHTML = session.challenges
@@ -175,6 +201,14 @@
     btnNewSession.addEventListener('click', () => {
       callbacks.onNewSession();
     });
+
+    if (finalArtifactEl) {
+      finalArtifactEl.addEventListener('click', (e) => {
+        if (e.target.closest('#btn-report-go-assembly') && callbacks.onGoAssembly) {
+          callbacks.onGoAssembly();
+        }
+      });
+    }
 
     return {
       render

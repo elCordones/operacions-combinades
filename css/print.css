@@ -13,6 +13,7 @@
     .no-print,
     #view-setup,
     #view-game,
+    #view-assembly,
     .continuum-drawer,
     dialog {
       display: none !important;

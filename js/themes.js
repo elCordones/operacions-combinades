@@ -86,7 +86,39 @@
             '<circle cx="32" cy="31" r="6" fill="#0f2942"/>'
           )
         }
-      ]
+      ],
+      assembly: {
+        title: 'Munta la Nau Estel·lar!',
+        subtitle: 'Acobla cada mòdul al seu lloc del plànol recordant el poder matemàtic que has superat.',
+        finalName: 'Nau Estel·lar Operativa',
+        finalDesc: 'Tots els sistemes de càlcul estan acoblats i llestos per viatjar per la galàxia!',
+        blueprintSvg:
+          '<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<rect x="16" y="16" width="368" height="268" rx="18" stroke="currentColor" stroke-opacity="0.16" stroke-dasharray="6 6"/>' +
+          '<path d="M200 34C244 74 266 130 266 208L200 242L134 208C134 130 156 74 200 34Z" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.32" stroke-width="2.5"/>' +
+          '<path d="M134 166L66 218L134 214M266 166L334 218L266 214" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.28" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<path d="M200 60V246M80 156H320M320 60L200 156" stroke="currentColor" stroke-opacity="0.16" stroke-width="1.8" stroke-dasharray="5 5"/>' +
+          '<circle cx="200" cy="156" r="40" stroke="currentColor" stroke-opacity="0.22" stroke-width="2" stroke-dasharray="4 4"/>' +
+          '</svg>',
+        finalSvg:
+          '<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<circle cx="60" cy="60" r="54" fill="#0c2d48" stroke="#38bdf8" stroke-width="3"/>' +
+          '<circle cx="26" cy="30" r="2.2" fill="#bae6fd"/><circle cx="94" cy="36" r="2" fill="#fde047"/><circle cx="24" cy="84" r="2" fill="#7dd3fc"/>' +
+          '<path d="M36 74L20 92L40 86M84 74L100 92L80 86" fill="#0284c7" stroke="#7dd3fc" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<path d="M60 18C77 36 86 58 86 84L60 96L34 84C34 58 43 36 60 18Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round"/>' +
+          '<circle cx="60" cy="54" r="11" fill="#0369a1" stroke="#fbbf24" stroke-width="2.5"/>' +
+          '<path d="M49 94L60 112L71 94" fill="#fb923c" stroke="#fde047" stroke-width="2" stroke-linejoin="round"/>' +
+          '<polygon points="88,20 91,26 98,27 93,31 94,38 88,35 82,38 83,31 78,27 85,26" fill="#fbbf24"/>' +
+          '</svg>',
+        slots: [
+          { idx: 0, x: 50, y: 20, zoneLabel: 'Cabina de rumb' },
+          { idx: 1, x: 50, y: 82, zoneLabel: 'Base propulsora' },
+          { idx: 2, x: 19, y: 52, zoneLabel: 'Ala deflectora' },
+          { idx: 3, x: 50, y: 52, zoneLabel: 'Reactor central' },
+          { idx: 4, x: 81, y: 52, zoneLabel: 'Ala de rastreig' },
+          { idx: 5, x: 81, y: 20, zoneLabel: 'Insígnia estel·lar' }
+        ]
+      }
     },
 
     lab: {
@@ -156,7 +188,35 @@
             '<circle cx="32" cy="32" r="10" fill="#fef3c7" stroke="#0f766e" stroke-width="2"/>'
           )
         }
-      ]
+      ],
+      assembly: {
+        title: 'Completa l’Estació d’Alquímia!',
+        subtitle: 'Col·loca cada reactiu i instrument al banc del laboratori seguint la jerarquia.',
+        finalName: 'Fórmula Mestra Activada',
+        finalDesc: 'Tots els elements purs s’han combinat amb precisió sense cap error de reacció!',
+        blueprintSvg:
+          '<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<rect x="16" y="16" width="368" height="268" rx="18" stroke="currentColor" stroke-opacity="0.16" stroke-dasharray="6 6"/>' +
+          '<rect x="44" y="54" width="312" height="192" rx="16" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.26" stroke-width="2.5"/>' +
+          '<path d="M76 75H324M76 225H324M76 75V225M200 75V225M324 75V225" stroke="currentColor" stroke-opacity="0.2" stroke-width="2" stroke-dasharray="5 5"/>' +
+          '<circle cx="200" cy="150" r="34" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.28" stroke-width="2"/>' +
+          '</svg>',
+        finalSvg:
+          '<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<circle cx="60" cy="60" r="54" fill="#0f3632" stroke="#2dd4bf" stroke-width="3"/>' +
+          '<path d="M46 24H74M50 24V46L28 84A10 10 0 0 0 36.5 98H83.5A10 10 0 0 0 92 84L70 46V24" fill="#ccfbf1" stroke="#14b8a6" stroke-width="3" stroke-linejoin="round"/>' +
+          '<path d="M37 74H83L90 86A6 6 0 0 1 85 95H35A6 6 0 0 1 30 86L37 74Z" fill="#fbbf24"/>' +
+          '<circle cx="52" cy="83" r="4" fill="#fef08a"/><circle cx="67" cy="86" r="3" fill="#ffffff"/><circle cx="60" cy="60" r="4" fill="#2dd4bf"/>' +
+          '</svg>',
+        slots: [
+          { idx: 0, x: 19, y: 25, zoneLabel: 'Suport d’entrada' },
+          { idx: 1, x: 50, y: 25, zoneLabel: 'Cambra catalitzadora' },
+          { idx: 2, x: 81, y: 25, zoneLabel: 'Filtre de prioritat' },
+          { idx: 3, x: 19, y: 75, zoneLabel: 'Matràs d’energia' },
+          { idx: 4, x: 50, y: 75, zoneLabel: 'Visor d’anàlisi' },
+          { idx: 5, x: 81, y: 75, zoneLabel: 'Segell mestre' }
+        ]
+      }
     },
 
     expedicio: {
@@ -229,7 +289,37 @@
             '<circle cx="32" cy="36" r="3.5" fill="#dc2626"/>'
           )
         }
-      ]
+      ],
+      assembly: {
+        title: 'Obre el Portal del Temple!',
+        subtitle: 'Encaixa les relíquies antigues al mur de pedra per revelar el tresor ocult.',
+        finalName: 'Portal del Temple Obert',
+        finalDesc: 'Has desxifrat totes les inscripcions i el tresor del temple brilla davant teu!',
+        blueprintSvg:
+          '<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<rect x="16" y="16" width="368" height="268" rx="18" stroke="currentColor" stroke-opacity="0.16" stroke-dasharray="6 6"/>' +
+          '<path d="M52 252L76 62H324L348 252H52Z" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.3" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<rect x="148" y="128" width="104" height="124" rx="10" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.28" stroke-width="2"/>' +
+          '<path d="M76 72H324M76 222H324" stroke="currentColor" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="5 5"/>' +
+          '</svg>',
+        finalSvg:
+          '<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<circle cx="60" cy="60" r="54" fill="#3b2608" stroke="#f59e0b" stroke-width="3"/>' +
+          '<path d="M22 94L32 38H88L98 94H22Z" fill="#fde68a" stroke="#b45309" stroke-width="3" stroke-linejoin="round"/>' +
+          '<path d="M40 38L48 22H72L80 38" fill="#fcd34d" stroke="#b45309" stroke-width="2.5"/>' +
+          '<rect x="44" y="54" width="32" height="40" rx="4" fill="#78350f"/>' +
+          '<path d="M45 76L49 62L56 69L60 58L64 69L71 62L75 76H45Z" fill="#fbbf24" stroke="#fef3c7" stroke-width="1.5"/>' +
+          '<circle cx="60" cy="70" r="3" fill="#dc2626"/>' +
+          '</svg>',
+        slots: [
+          { idx: 0, x: 19, y: 24, zoneLabel: 'Relleu de ruta' },
+          { idx: 1, x: 81, y: 24, zoneLabel: 'Pany superior' },
+          { idx: 2, x: 50, y: 24, zoneLabel: 'Clau de volta' },
+          { idx: 3, x: 19, y: 74, zoneLabel: 'Pilar esquerre' },
+          { idx: 4, x: 81, y: 74, zoneLabel: 'Pilar dret' },
+          { idx: 5, x: 50, y: 74, zoneLabel: 'Altar central' }
+        ]
+      }
     },
 
     codi: {
@@ -302,7 +392,38 @@
             '<circle cx="32" cy="32" r="5" fill="#fbbf24"/>'
           )
         }
-      ]
+      ],
+      assembly: {
+        title: 'Assembla i Activa el Robot!',
+        subtitle: 'Connecta cada mòdul al xassís segons la seva funció lògica.',
+        finalName: 'Robot Intel·ligent Activat',
+        finalDesc: 'Tots els circuits i processadors de jerarquia funcionen al 100%!',
+        blueprintSvg:
+          '<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<rect x="16" y="16" width="368" height="268" rx="18" stroke="currentColor" stroke-opacity="0.16" stroke-dasharray="6 6"/>' +
+          '<rect x="150" y="34" width="100" height="60" rx="14" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.3" stroke-width="2.5"/>' +
+          '<rect x="128" y="106" width="144" height="106" rx="16" fill="currentColor" fill-opacity="0.06" stroke="currentColor" stroke-opacity="0.3" stroke-width="2.5"/>' +
+          '<path d="M76 156H128M272 156H324M200 94V106M160 212L104 246M240 212L296 246" stroke="currentColor" stroke-opacity="0.24" stroke-width="2.5" stroke-dasharray="5 5"/>' +
+          '</svg>',
+        finalSvg:
+          '<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<circle cx="60" cy="60" r="54" fill="#13284d" stroke="#60a5fa" stroke-width="3"/>' +
+          '<path d="M60 16V28" stroke="#93c5fd" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="14" r="4" fill="#fbbf24"/>' +
+          '<rect x="34" y="28" width="52" height="32" rx="10" fill="#e2e8f0" stroke="#3b82f6" stroke-width="2.5"/>' +
+          '<circle cx="48" cy="44" r="5" fill="#2563eb"/><circle cx="72" cy="44" r="5" fill="#2563eb"/>' +
+          '<rect x="28" y="64" width="64" height="34" rx="10" fill="#1e293b" stroke="#60a5fa" stroke-width="2.5"/>' +
+          '<polygon points="60,71 71,78 71,88 60,94 49,88 49,78" fill="#3b82f6" stroke="#fbbf24" stroke-width="2"/>' +
+          '<circle cx="60" cy="82.5" r="4" fill="#fbbf24"/>' +
+          '</svg>',
+        slots: [
+          { idx: 0, x: 50, y: 20, zoneLabel: 'Cap òptic' },
+          { idx: 1, x: 19, y: 52, zoneLabel: 'Braç mecànic' },
+          { idx: 2, x: 50, y: 52, zoneLabel: 'Tòrax lògic' },
+          { idx: 3, x: 81, y: 52, zoneLabel: 'Mòdul d’energia' },
+          { idx: 4, x: 25, y: 82, zoneLabel: 'Xassís base' },
+          { idx: 5, x: 75, y: 82, zoneLabel: 'Nucli quàntic' }
+        ]
+      }
     },
 
     classic: {
@@ -351,7 +472,35 @@
           desc: 'Repte complet superat',
           svg: svgWrap('<circle cx="32" cy="32" r="21" fill="#fef08a" stroke="#a16207" stroke-width="2.5"/><path d="M23 33l6 6 12-13" stroke="#854d0e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>')
         }
-      ]
+      ],
+      assembly: {
+        title: 'Construeix la Piràmide de Mestratge',
+        subtitle: 'Ordena les fites aconseguides al mapa visual de la sessió.',
+        finalName: 'Piràmide de Mestratge Completa',
+        finalDesc: 'Has consolidat tots els graons de les operacions combinades amb serenor i precisió.',
+        blueprintSvg:
+          '<svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<rect x="16" y="16" width="368" height="268" rx="18" stroke="currentColor" stroke-opacity="0.16" stroke-dasharray="6 6"/>' +
+          '<polygon points="200,32 356,258 44,258" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.28" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<path d="M138 118H262M92 188H308" stroke="currentColor" stroke-opacity="0.22" stroke-width="2" stroke-dasharray="5 5"/>' +
+          '</svg>',
+        finalSvg:
+          '<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<circle cx="60" cy="60" r="54" fill="#eff6ff" stroke="#1e40af" stroke-width="3"/>' +
+          '<polygon points="60,20 100,90 20,90" fill="#dbeafe" stroke="#1e40af" stroke-width="3" stroke-linejoin="round"/>' +
+          '<path d="M44 50H76M32 70H88" stroke="#1e40af" stroke-width="2.5"/>' +
+          '<circle cx="60" cy="37" r="7" fill="#fbbf24" stroke="#92400e" stroke-width="2"/>' +
+          '<path d="M47 78L55 86L73 67" stroke="#15803d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>',
+        slots: [
+          { idx: 0, x: 19, y: 78, zoneLabel: 'Base 1' },
+          { idx: 1, x: 50, y: 78, zoneLabel: 'Base 2' },
+          { idx: 2, x: 81, y: 78, zoneLabel: 'Base 3' },
+          { idx: 3, x: 34, y: 48, zoneLabel: 'Graó mitjà A' },
+          { idx: 4, x: 66, y: 48, zoneLabel: 'Graó mitjà B' },
+          { idx: 5, x: 50, y: 20, zoneLabel: 'Cim mestre' }
+        ]
+      }
     }
   };
 

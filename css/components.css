@@ -910,6 +910,12 @@
     color: var(--success-text);
   }
 
+  .feedback-box.is-guide {
+    background-color: var(--info-bg);
+    border-color: var(--info-border);
+    color: var(--info-text);
+  }
+
   .feedback-icon {
     font-size: 1.25rem;
     line-height: 1.3;
@@ -1406,6 +1412,347 @@
     inline-size: 100%;
     block-size: 100%;
     display: block;
+  }
+
+  /* Muntatge Final Interactiu (Recompensa + Micro-repàs) */
+  .assembly-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  @media (min-width: 960px) {
+    .assembly-layout {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    }
+  }
+
+  .assembly-stage {
+    position: relative;
+    inline-size: 100%;
+    aspect-ratio: 4 / 3;
+    min-block-size: 260px;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    overflow: hidden;
+  }
+
+  .assembly-blueprint {
+    position: absolute;
+    inset: 0;
+    color: var(--accent-primary);
+    pointer-events: none;
+  }
+
+  .assembly-blueprint svg {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+  }
+
+  .assembly-slots {
+    position: absolute;
+    inset: 0;
+  }
+
+  .assembly-slot {
+    position: absolute;
+    inset-block-start: var(--slot-y, 50%);
+    inset-inline-start: var(--slot-x, 50%);
+    transform: translate(-50%, -50%);
+    inline-size: clamp(4.8rem, 25%, 7.8rem);
+    min-block-size: 3.9rem;
+    padding: 0.3rem 0.35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.18rem;
+    border-radius: var(--radius-md);
+    border: 2px dashed var(--border-strong);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .assembly-slot.is-awaiting-drop {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+  }
+
+  .assembly-slot.is-empty:hover,
+  .assembly-slot.is-drop-target {
+    border-style: solid;
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+
+  .assembly-slot.is-placed {
+    border-style: solid;
+    border-color: var(--success-border);
+    background-color: var(--bg-surface);
+    cursor: default;
+  }
+
+  .assembly-slot.is-base {
+    border-style: solid;
+    border-color: var(--border-default);
+    opacity: 0.58;
+    cursor: default;
+  }
+
+  .assembly-slot.is-error-shake {
+    border-style: solid;
+    border-color: var(--warn-border);
+    background-color: var(--warn-bg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .assembly-slot.is-placed {
+      animation: slot-pop 0.28s ease-out;
+    }
+
+    .assembly-slot.is-error-shake {
+      animation: slot-shake 0.32s ease;
+    }
+  }
+
+  @keyframes slot-pop {
+    0% { transform: translate(-50%, -50%) scale(0.86); }
+    70% { transform: translate(-50%, -50%) scale(1.06); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+
+  @keyframes slot-shake {
+    0%, 100% { transform: translate(-50%, -50%); }
+    25% { transform: translate(calc(-50% - 5px), -50%); }
+    65% { transform: translate(calc(-50% + 5px), -50%); }
+  }
+
+  .assembly-slot:focus-visible,
+  .assembly-piece:focus-visible {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+
+  .slot-badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-text);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .slot-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--text-secondary);
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  .slot-svg {
+    inline-size: 2.15rem;
+    block-size: 2.15rem;
+  }
+
+  .slot-svg svg {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+  }
+
+  .assembly-tray {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .assembly-piece {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-default);
+    background-color: var(--bg-elevated);
+    text-align: start;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .assembly-piece:hover {
+    border-color: var(--border-strong);
+  }
+
+  .assembly-piece.is-selected {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+  }
+
+  .piece-svg {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    flex: 0 0 auto;
+  }
+
+  .piece-svg svg {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+  }
+
+  .piece-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-inline-size: 0;
+  }
+
+  .piece-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .piece-clue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .piece-badge {
+    display: inline-block;
+    padding: 0.08rem 0.4rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-subtle);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.74rem;
+  }
+
+  .assembly-drag-ghost {
+    position: fixed;
+    z-index: 60;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--accent-primary);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.88rem;
+    box-shadow: var(--shadow-md);
+    opacity: 0.94;
+  }
+
+  .assembly-complete-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border-color: var(--success-border);
+    background-color: var(--success-bg);
+    color: var(--success-text);
+  }
+
+  .assembly-complete-card .lead {
+    color: var(--success-text);
+  }
+
+  .assembly-final-art {
+    inline-size: 7.5rem;
+    block-size: 7.5rem;
+  }
+
+  .assembly-final-art svg {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+  }
+
+  .final-artifact-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    margin-block-end: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent-primary);
+    background-color: var(--accent-soft);
+    color: var(--accent-soft-text);
+  }
+
+  .final-artifact-art {
+    inline-size: 4.75rem;
+    block-size: 4.75rem;
+    flex: 0 0 auto;
+  }
+
+  .final-artifact-art svg {
+    inline-size: 100%;
+    block-size: 100%;
+    display: block;
+  }
+
+  .final-artifact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    flex: 1 1 200px;
+  }
+
+  .final-artifact-info p {
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 560px) {
+    .assembly-slot {
+      inline-size: clamp(4.5rem, 26%, 5.4rem);
+      min-block-size: 3.35rem;
+      padding: 0.22rem 0.25rem;
+    }
+
+    .slot-svg {
+      inline-size: 1.65rem;
+      block-size: 1.65rem;
+    }
+
+    .slot-label {
+      font-size: 0.6rem;
+    }
+
+    .slot-badge {
+      font-size: 0.65rem;
+      padding: 0.05rem 0.3rem;
+    }
   }
 
   /* Peu de pàgina obligatori compacte (apps-escolars) */

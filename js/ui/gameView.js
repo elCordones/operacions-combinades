@@ -142,9 +142,12 @@
         const isLastOfChallenge = !isTargeted && session.currentExerciseIdx + 1 >= session.config.exercisesPerChallenge;
         const isLastOfAll = isLastOfChallenge && session.currentChallengeIdx + 1 >= session.challenges.length;
 
-        if (isLastTargeted || isLastOfAll) {
-          doneMessage.textContent = `Resultat final: ${AST.evaluate(ex.currentAst)}. Has completat tots els reptes!`;
+        if (isLastTargeted) {
+          doneMessage.textContent = `Resultat final: ${AST.evaluate(ex.currentAst)}. Has completat l’entrenament dirigit!`;
           btnNextExercise.textContent = 'Veure informe formatiu →';
+        } else if (isLastOfAll) {
+          doneMessage.textContent = `Resultat final: ${AST.evaluate(ex.currentAst)}. Has completat tots els reptes!`;
+          btnNextExercise.textContent = 'Munta l’element final! →';
         } else if (isLastOfChallenge) {
           doneMessage.textContent = `Resultat final: ${AST.evaluate(ex.currentAst)}. Repte completat!`;
           btnNextExercise.textContent = 'Recull el teu trofeu →';
@@ -328,7 +331,7 @@
         const onTrophyClosed = () => {
           trophyDialog.removeEventListener('close', onTrophyClosed);
           if (outcome.event === 'session_done') {
-            callbacks.onGoReport();
+            callbacks.onGoAssembly();
           } else {
             render(currentSession);
             challengeTitle.focus();
@@ -339,8 +342,10 @@
         return;
       }
 
-      if (outcome.event === 'targeted_done' || outcome.event === 'session_done') {
+      if (outcome.event === 'targeted_done') {
         callbacks.onGoReport();
+      } else if (outcome.event === 'session_done') {
+        callbacks.onGoAssembly();
       } else {
         render(currentSession);
       }

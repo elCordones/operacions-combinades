@@ -6,6 +6,7 @@
   const Sound = OpComb.Sound;
   const SetupView = OpComb.SetupView;
   const GameView = OpComb.GameView;
+  const AssemblyView = OpComb.AssemblyView;
   const ReportView = OpComb.ReportView;
 
   function installDialogClosedByFallback() {
@@ -30,6 +31,7 @@
 
     const viewSetup = document.getElementById('view-setup');
     const viewGame = document.getElementById('view-game');
+    const viewAssembly = document.getElementById('view-assembly');
     const viewReport = document.getElementById('view-report');
     const btnGoSetup = document.getElementById('btn-go-setup');
     const btnOpenGuide = document.getElementById('btn-open-guide');
@@ -87,6 +89,7 @@
     function applyViewSwitch(viewName) {
       viewSetup.hidden = viewName !== 'setup';
       viewGame.hidden = viewName !== 'game';
+      if (viewAssembly) viewAssembly.hidden = viewName !== 'assembly';
       viewReport.hidden = viewName !== 'report';
       btnGoSetup.hidden = viewName === 'setup';
       if (drawer && drawer.open) drawer.close();
@@ -94,6 +97,7 @@
 
     function getHeadingForView(viewName) {
       if (viewName === 'game') return document.getElementById('game-challenge-title');
+      if (viewName === 'assembly') return document.getElementById('assembly-heading');
       if (viewName === 'report') return document.getElementById('report-heading');
       return document.getElementById('setup-heading');
     }
@@ -115,7 +119,21 @@
         });
     }
 
+    const assemblyView = AssemblyView.init({
+      onGoReport: () => {
+        reportView.render(activeSession);
+        navigateTo('report');
+      }
+    });
+
     const gameView = GameView.init({
+      onGoAssembly: () => {
+        if (!activeSession) return;
+        activeSession.view = 'assembly';
+        Session.saveSession(activeSession);
+        assemblyView.render(activeSession);
+        navigateTo('assembly');
+      },
       onGoReport: () => {
         reportView.render(activeSession);
         navigateTo('report');
@@ -128,6 +146,13 @@
         Session.startTargetedTraining(activeSession, axis);
         gameView.render(activeSession);
         navigateTo('game');
+      },
+      onGoAssembly: () => {
+        if (!activeSession) return;
+        activeSession.view = 'assembly';
+        Session.saveSession(activeSession);
+        assemblyView.render(activeSession);
+        navigateTo('assembly');
       },
       onNewSession: () => {
         Session.clearSavedSession();
@@ -151,6 +176,9 @@
         if (activeSession.view === 'report') {
           reportView.render(activeSession);
           navigateTo('report');
+        } else if (activeSession.view === 'assembly') {
+          assemblyView.render(activeSession);
+          navigateTo('assembly');
         } else {
           gameView.render(activeSession);
           navigateTo('game');

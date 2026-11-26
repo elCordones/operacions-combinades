@@ -40,7 +40,7 @@ for (const rel of assetRefs) {
   assert(fs.existsSync(full), 'Fitxer referenciat no trobat: ' + rel);
 }
 
-console.log('2. Comprovant les 5 temàtiques i els 6 trofeus cadascuna...');
+console.log('2. Comprovant les 5 temàtiques, els 6 trofeus i els plànols de muntatge...');
 const themes = Themes.getAllThemes();
 assert.strictEqual(themes.length, 5, 'Hi ha d’haver 5 temàtiques');
 for (const t of themes) {
@@ -48,6 +48,9 @@ for (const t of themes) {
   for (const tr of t.trophies) {
     assert(tr.svg.includes('<svg'), `Trofeu ${tr.id} sense SVG`);
   }
+  assert(t.assembly && t.assembly.blueprintSvg.includes('<svg'), `Temàtica ${t.id} sense blueprintSvg`);
+  assert(t.assembly && t.assembly.finalSvg.includes('<svg'), `Temàtica ${t.id} sense finalSvg`);
+  assert.strictEqual(t.assembly.slots.length, 6, `Temàtica ${t.id} ha de tenir 6 ranures`);
 }
 
 console.log('3. Stress-test del generador i resolució en cascada (1.200 exercicis)...');
@@ -193,6 +196,18 @@ function assertAstHasIds(node) {
   Session.startTargetedTraining(sess, 'jerarquia');
   assertAstHasIds(sess.currentExercise.currentAst);
   assert(!AST.renderHtml(sess.currentExercise.currentAst).includes('undefined'));
+
+  // Comprova la transició final cap a 'assembly' en completar tots els reptes
+  const sessFull = Session.createSession({ course: '5e', themeId: 'lab', exercisesPerChallenge: 1 });
+  assert.strictEqual(sessFull.assemblyCompleted, false);
+  assert.deepStrictEqual(sessFull.assemblyPlaced, []);
+  let lastOutcome = null;
+  for (let i = 0; i < sessFull.challenges.length; i++) {
+    lastOutcome = Session.advanceAfterExerciseComplete(sessFull);
+  }
+  assert.strictEqual(lastOutcome.event, 'session_done');
+  assert.strictEqual(sessFull.view, 'assembly');
+  assert.strictEqual(sessFull.trophies.length, sessFull.challenges.length);
 }
 
 console.log('7. Comprovant saneig de localStorage antic, dobles parèntesis i parèntesis independents...');

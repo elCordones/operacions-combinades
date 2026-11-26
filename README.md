@@ -57,9 +57,9 @@ flowchart LR
 
 ---
 
-## 5 temàtiques amb trofeus col·leccionables
+## 5 temàtiques amb trofeus col·leccionables i muntatge final
 
-Cada repte superat desbloqueja una peça o insígnia SVG pròpia a la vitrina de la sessió:
+Cada repte superat desbloqueja una peça o insígnia SVG pròpia a la vitrina de la sessió. En completar tots els reptes, l'alumnat munta les peces aconseguides en un trencaclosques interactiu amb micro-repàs de jerarquia per activar l'element final de la temàtica:
 
 | Temàtica | Narrativa a l'aula | Perfil d'ús |
 | :--- | :--- | :--- |
@@ -120,6 +120,7 @@ En acabar (o en qualsevol moment des de *Veure informe final*), s'ofereix un **d
 │   └── ui/
 │       ├── setupView.js     # Pantalla inicial de configuració
 │       ├── gameView.js      # Tauler interactiu pas a pas
+│       ├── assemblyView.js  # Muntatge final interactiu (recompensa + micro-repàs)
 │       ├── continuumView.js # Panell lateral i modal mòbil del Contínuum
 │       ├── reportView.js    # Informe formatiu, entrenament dirigit i PDF
 │       └── sound.js         # Feedback sonor lleuger via Web Audio API

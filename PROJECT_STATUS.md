@@ -28,6 +28,7 @@
   - `js/state/session.js`: Gestió de l'estat de partida, progrés de reptes, historial i `localStorage`.
   - `js/ui/setupView.js`: Pantalla inicial de selecció de curs/mode, personalització i temàtica.
   - `js/ui/gameView.js`: Tauler de resolució pas a pas en cascada i guia ràpida DUA.
+  - `js/ui/assemblyView.js`: Activitat final de muntatge tipus trencaclosques amb micro-repàs de jerarquia.
   - `js/ui/continuumView.js`: Finestreta lateral/desplegable del Contínuum en temps real.
   - `js/ui/reportView.js`: Resum final formatiu, vitrina de trofeus, entrenament dirigit i impressió PDF.
   - `js/ui/sound.js`: Síntesi lleugera de feedback sonor via Web Audio API amb control de silenci.
@@ -95,10 +96,10 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - [x] Motor matemàtic AST (`js/math/ast.js`), generador procedimental amb invariants de Primària (`js/math/generator.js`) i diagnòstic formatiu de pistes (`js/math/hints.js`).
   - [x] Model del Contínuum amb mitjana mòbil ponderada (`js/state/continuum.js`), gestió de sessió amb `localStorage` (`js/state/session.js`) i 5 temàtiques amb trofeus SVG (`js/themes.js`).
   - [x] Interfície web responsive i accessible (`index.html`, `css/theme.css`, `css/layout.css`, `css/components.css`, `css/print.css`) amb guia ràpida `<dialog>`, panell mòbil del Contínuum en `<dialog>` natiu, selector d'aparença **Clar / Fosc / Dispositiu** (`color-scheme` + `light-dark()` amb persistència a `localStorage` i script anti-FOUC), diàleg de trofeu, control de so amb icones SVG i peu de llicències compacte (`© David Cordones · 2026`, AGPL v3 + CC BY-SA 4.0).
-  - [x] Controladors de vistes (`setupView.js`, `gameView.js`, `continuumView.js`, `reportView.js`, `sound.js`, `main.js`) incloent-hi *Entrenament Dirigit*, autoavaluació metacognitiva, historial desplegable `<details>` i impressió PDF (sempre en mode clar).
-  - [x] Bateria automatitzada (`tests/verify-v1.js`) i proves E2E en Chrome headless: sintaxi JS vàlida, 1.380 exercicis generats i resolts en cascada, regressió d'IDs/saneig de `localStorage`, flux complet al DOM sense errors de consola, validació dels 3 modes d'aparença, peu de pàgina compacte (~41 px) i disseny responsive en escriptori (`1280×960`) i mòbil (`390×844`).
+  - [x] Controladors de vistes (`setupView.js`, `gameView.js`, `assemblyView.js`, `continuumView.js`, `reportView.js`, `sound.js`, `main.js`) incloent-hi el **Muntatge Final Interactiu** (recompensa lúdica + micro-repàs), *Entrenament Dirigit*, autoavaluació metacognitiva, historial desplegable `<details>` i impressió PDF (sempre en mode clar).
+  - [x] Bateria automatitzada (`tests/verify-v1.js`) i proves E2E en Chrome headless: sintaxi JS vàlida, 1.380 exercicis generats i resolts en cascada, regressió d'IDs/saneig de `localStorage`, flux complet al DOM sense errors de consola, validació dels 3 modes d'aparença, peu de pàgina compacte (~41 px), muntatge final en 6è i 5è i disseny responsive en escriptori (`1280×980`) i mòbil (`390×844`).
 - **Punt exacte on ens hem quedat**:
-  - S'ha dissenyat el favicon vectorial (`favicon.svg`), s'ha reestructurat visualment `README.md` i s'ha publicat el projecte a GitHub (`https://github.com/elCordones/operacions-combinades`) i **GitHub Pages** (`https://elcordones.github.io/operacions-combinades/`).
+  - S'ha implementat l'activitat final de muntatge tipus trencaclosques per a les 5 temàtiques (`view-assembly` + `assemblyView.js`) amb doble interacció (clic/teclat i arrossegament per punter), ranures preinstal·lades en 5è/Personalitzat, element final integrat a l'informe i desplegament a GitHub Pages (`https://elcordones.github.io/operacions-combinades/`).
 - **Decisions tècniques i incidències conegudes**:
   - Arquitectura 100% *client-side* basada en IIFEs sota l'espai de noms compartit `globalThis.OpComb` (carregats amb `<script defer>`), compatible tant amb doble clic sobre `index.html` (`file://`) com amb servidor web.
   - `AST.clone(node)` ara preserva `node.id`, i `Session` centralitza la inicialització d'exercicis a `createExerciseState` garantint IDs vàlids des del primer moment.
