@@ -15,7 +15,7 @@
   - `index.html`: Estructura principal semàntica i contenidors de vistes.
   - `favicon.svg`: Icona vectorial representativa de les quatre operacions (`+ − × ÷`).
   - `README.md`, `.nojekyll`, `.gitignore`: Documentació del repositori i preparació per a GitHub Pages.
-  - `css/tokens.css`: Variables de disseny, paletes cromàtiques per temàtica i tokens tipogràfics/d'accessibilitat.
+  - `css/theme.css`: Variables de disseny, paletes cromàtiques per temàtica i tokens tipogràfics/d'accessibilitat.
   - `css/layout.css`: Graella principal (`main + aside`), adaptació responsive i Container Queries.
   - `css/components.css`: Estils de targetes, cascada interactiva, trofeus, barres del contínuum, diàlegs i peu de pàgina.
   - `css/print.css`: Full d'estil d'impressió/PDF net per a l'informe formatiu final.
@@ -94,7 +94,7 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - [x] Definició tecnopedagògica completa (5 temàtiques, progressió 5è/6è/Personalitzat, mecànica pas a pas en cascada, Contínuum en 6 eixos i informe formatiu).
   - [x] Motor matemàtic AST (`js/math/ast.js`), generador procedimental amb invariants de Primària (`js/math/generator.js`) i diagnòstic formatiu de pistes (`js/math/hints.js`).
   - [x] Model del Contínuum amb mitjana mòbil ponderada (`js/state/continuum.js`), gestió de sessió amb `localStorage` (`js/state/session.js`) i 5 temàtiques amb trofeus SVG (`js/themes.js`).
-  - [x] Interfície web responsive i accessible (`index.html`, `css/tokens.css`, `css/layout.css`, `css/components.css`, `css/print.css`) amb guia ràpida `<dialog>`, panell mòbil del Contínuum en `<dialog>` natiu, selector d'aparença **Clar / Fosc / Dispositiu** (`color-scheme` + `light-dark()` amb persistència a `localStorage` i script anti-FOUC), diàleg de trofeu, control de so amb icones SVG i peu de llicències compacte (`© David Cordones · 2026`, AGPL v3 + CC BY-SA 4.0).
+  - [x] Interfície web responsive i accessible (`index.html`, `css/theme.css`, `css/layout.css`, `css/components.css`, `css/print.css`) amb guia ràpida `<dialog>`, panell mòbil del Contínuum en `<dialog>` natiu, selector d'aparença **Clar / Fosc / Dispositiu** (`color-scheme` + `light-dark()` amb persistència a `localStorage` i script anti-FOUC), diàleg de trofeu, control de so amb icones SVG i peu de llicències compacte (`© David Cordones · 2026`, AGPL v3 + CC BY-SA 4.0).
   - [x] Controladors de vistes (`setupView.js`, `gameView.js`, `continuumView.js`, `reportView.js`, `sound.js`, `main.js`) incloent-hi *Entrenament Dirigit*, autoavaluació metacognitiva, historial desplegable `<details>` i impressió PDF (sempre en mode clar).
   - [x] Bateria automatitzada (`tests/verify-v1.js`) i proves E2E en Chrome headless: sintaxi JS vàlida, 1.380 exercicis generats i resolts en cascada, regressió d'IDs/saneig de `localStorage`, flux complet al DOM sense errors de consola, validació dels 3 modes d'aparença, peu de pàgina compacte (~41 px) i disseny responsive en escriptori (`1280×960`) i mòbil (`390×844`).
 - **Punt exacte on ens hem quedat**:
@@ -104,6 +104,7 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
   - `AST.clone(node)` ara preserva `node.id`, i `Session` centralitza la inicialització d'exercicis a `createExerciseState` garantint IDs vàlids des del primer moment.
   - `navigateTo()` protegeix `document.startViewTransition` quan `document.hidden` és cert o la transició s'avorta (`InvalidStateError`) per evitar promeses rebutjades sense capturar.
   - Mode d'aparença implementat amb primitives Baseline (`<meta name="color-scheme" content="light dark">`, `color-scheme` i `light-dark()`) i forçat a `light` en `@media print`.
+  - El full d'estils base s'anomena `css/theme.css` (en lloc de `tokens.css`) perquè el patró `*token*` de `.gitignore_global` no l'exclogui en fer `git add`.
 
 ---
 
@@ -114,7 +115,7 @@ Seleccionables a l'inici de la sessió, cada repte superat desbloqueja un trofeu
 - **Fase 2 — Estat de sessió, Contínuum i 5 temàtiques**:
   - [x] Implementar `js/state/continuum.js`, `js/state/session.js` i `js/themes.js`.
 - **Fase 3 — Interfície responsive, cascada interactiva i Contínuum en directe**:
-  - [x] Maquetar `index.html` i `css/{tokens,layout,components,print}.css` amb el peu de pàgina obligatori.
+  - [x] Maquetar `index.html` i `css/{theme,layout,components,print}.css` amb el peu de pàgina obligatori.
   - [x] Implementar `js/ui/{setupView,gameView,continuumView,sound}.js` i `js/main.js`.
 - **Fase 4 — Informe formatiu final, entrenament dirigit i impressió PDF**:
   - [x] Implementar `js/ui/reportView.js` i `css/print.css`.

@@ -103,7 +103,7 @@ En acabar (o en qualsevol moment des de *Veure informe final*), s'ofereix un **d
 ├── favicon.svg              # Icona vectorial (+ − × ÷)
 ├── .nojekyll                # Desactiva Jekyll a GitHub Pages
 ├── css/
-│   ├── tokens.css           # Design tokens, temes i suport light-dark()
+│   ├── theme.css            # Design tokens, temes i suport light-dark()
 │   ├── layout.css           # Graella responsive i Container Queries
 │   ├── components.css       # Cascada interactiva, trofeus, contínuum i peu
 │   └── print.css            # Full d'impressió / PDF net en mode clar
