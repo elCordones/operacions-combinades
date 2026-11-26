@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#bg)"/>
+  <rect x="5" y="5" width="54" height="54" rx="13" stroke="#7dd3fc" stroke-opacity="0.35" stroke-width="2"/>
+
+  <!-- Suma (+) -->
+  <path d="M20 14v12M14 20h12" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round"/>
+
+  <!-- Resta (-) -->
+  <path d="M38 20h12" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round"/>
+
+  <!-- Multiplicació (×) -->
+  <path d="M15.5 39.5l9 9M24.5 39.5l-9 9" stroke="#fbbf24" stroke-width="4.6" stroke-linecap="round"/>
+
+  <!-- Divisió (÷) -->
+  <path d="M38 44h12" stroke="#fbbf24" stroke-width="4.4" stroke-linecap="round"/>
+  <circle cx="44" cy="37.5" r="2.6" fill="#fbbf24"/>
+  <circle cx="44" cy="50.5" r="2.6" fill="#fbbf24"/>
+</svg>

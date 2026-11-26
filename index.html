@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ca" data-theme="cosmos">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Aplicació web educativa interactiva per practicar les operacions combinades a 5è i 6è de Primària amb resolució pas a pas en cascada i Contínuum de Coneixement.">
+  <title>Operacions Combinades · Cicle Superior (5è i 6è)</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script>
+    try {
+      const m = localStorage.getItem('opcomb_v1_color_mode');
+      document.documentElement.dataset.colorMode =
+        m === 'light' || m === 'dark' || m === 'system' ? m : 'system';
+    } catch (_e) {
+      document.documentElement.dataset.colorMode = 'system';
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+
+  <script defer src="js/math/ast.js"></script>
+  <script defer src="js/math/generator.js"></script>
+  <script defer src="js/math/hints.js"></script>
+  <script defer src="js/themes.js"></script>
+  <script defer src="js/state/continuum.js"></script>
+  <script defer src="js/state/session.js"></script>
+  <script defer src="js/ui/sound.js"></script>
+  <script defer src="js/ui/continuumView.js"></script>
+  <script defer src="js/ui/setupView.js"></script>
+  <script defer src="js/ui/gameView.js"></script>
+  <script defer src="js/ui/reportView.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#app-main">Salta al contingut principal</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <path d="M8 9h4M10 7v4M14.5 9h2M8 15l3 3M11 15l-3 3M14.5 16.5h2"/>
+          </svg>
+        </span>
+        <div>
+          <span class="brand-title">Operacions Combinades</span>
+          <span class="brand-sub">Cicle Superior · 5è i 6è</span>
+        </div>
+      </div>
+
+      <nav class="topbar-actions" aria-label="Eines de l'aplicació">
+        <div class="color-mode-switch" role="group" aria-label="Mode d'aparença">
+          <button type="button" class="color-mode-btn" data-color-mode="light" aria-pressed="false" aria-label="Mode clar" title="Mode clar">
+            <span class="btn-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+              </svg>
+            </span>
+            <span class="mode-label">Clar</span>
+          </button>
+          <button type="button" class="color-mode-btn" data-color-mode="dark" aria-pressed="false" aria-label="Mode fosc" title="Mode fosc">
+            <span class="btn-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            </span>
+            <span class="mode-label">Fosc</span>
+          </button>
+          <button type="button" class="color-mode-btn" data-color-mode="system" aria-pressed="true" aria-label="Segons el dispositiu" title="Segons el dispositiu">
+            <span class="btn-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </span>
+            <span class="mode-label">Dispositiu</span>
+          </button>
+        </div>
+
+        <button type="button" id="btn-open-guide" class="btn btn-ghost btn-sm" aria-label="Obre la guia de jerarquia">
+          <span class="btn-icon" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3L3 20h18L12 3z"/>
+              <path d="M7.5 14h9M9.5 10h5"/>
+            </svg>
+          </span>
+          <span class="btn-label">Guia ràpida</span>
+        </button>
+        <button type="button" id="btn-toggle-sound" class="btn btn-ghost btn-sm" aria-pressed="false" aria-label="Silencia o activa els sons">
+          <span id="sound-icon" class="btn-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+          </span>
+          <span id="sound-label" class="btn-label">So activat</span>
+        </button>
+        <button type="button" id="btn-go-setup" class="btn btn-ghost btn-sm" hidden>
+          <span class="btn-icon" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 10.5L12 3l9 7.5"/>
+              <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>
+            </svg>
+          </span>
+          <span class="btn-label">Inici</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="app-main" class="app-main">
+    <!-- VISTA 1: CONFIGURACIÓ INICIAL -->
+    <section id="view-setup" class="view-section" aria-labelledby="setup-heading">
+      <div class="setup-hero">
+        <h1 id="setup-heading" tabindex="-1">Prepara la teva aventura de càlcul</h1>
+        <p class="lead">Tria el teu curs, selecciona una temàtica de trofeus i resol cada repte pas a pas tot observant com creix el teu <strong>Contínuum de Coneixement</strong>.</p>
+      </div>
+
+      <div id="resume-banner" class="banner banner-info" hidden>
+        <div class="banner-body">
+          <strong>Tens una sessió en curs guardada!</strong>
+          <span id="resume-summary">Pots reprendre on ho vas deixar o començar de nou.</span>
+        </div>
+        <div class="banner-actions">
+          <button type="button" id="btn-resume-session" class="btn btn-primary btn-sm">Reprendre sessió</button>
+          <button type="button" id="btn-discard-session" class="btn btn-ghost btn-sm">Descartar</button>
+        </div>
+      </div>
+
+      <form id="setup-form" class="setup-grid" novalidate>
+        <section class="card setup-card" aria-labelledby="course-legend">
+          <h2 id="course-legend" class="card-title">1. Tria el nivell</h2>
+          <div class="option-cards" role="radiogroup" aria-labelledby="course-legend">
+            <label class="choice-card">
+              <input type="radio" name="course" value="5e">
+              <span class="choice-badge">5è</span>
+              <span class="choice-title">5è de Primària</span>
+              <span class="choice-desc">5 reptes progressius: ordre, × ÷, parèntesis i introducció a potències.</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="course" value="6e" checked>
+              <span class="choice-badge">6è</span>
+              <span class="choice-title">6è de Primària</span>
+              <span class="choice-desc">6 reptes complets amb parèntesis, potències i arrels quadrades exactes.</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="course" value="custom">
+              <span class="choice-badge">A mida</span>
+              <span class="choice-title">Mode Personalitzat</span>
+              <span class="choice-desc">Configura quines operacions vols repassar en aquesta sessió.</span>
+            </label>
+          </div>
+
+          <div id="custom-ops-panel" class="custom-ops" hidden>
+            <h3>Operacions actives</h3>
+            <div class="checkbox-grid">
+              <label class="check-pill">
+                <input type="checkbox" id="op-mult-div" checked>
+                <span>Multiplicacions i divisions (× ÷)</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="op-parentesis" checked>
+                <span>Parèntesis ( )</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="op-potencies" checked>
+                <span>Potències (a², a³)</span>
+              </label>
+              <label class="check-pill">
+                <input type="checkbox" id="op-arrels" checked>
+                <span>Arrels quadrades (√)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="length-selector">
+            <span class="field-label" id="ex-count-label">Exercicis per repte:</span>
+            <div class="segmented" role="radiogroup" aria-labelledby="ex-count-label">
+              <label class="seg-option">
+                <input type="radio" name="exCount" value="3" checked>
+                <span>3 (Àgil)</span>
+              </label>
+              <label class="seg-option">
+                <input type="radio" name="exCount" value="4">
+                <span>4 (Estàndard)</span>
+              </label>
+              <label class="seg-option">
+                <input type="radio" name="exCount" value="5">
+                <span>5 (Intensiu)</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card setup-card" aria-labelledby="theme-legend">
+          <h2 id="theme-legend" class="card-title">2. Tria la temàtica dels trofeus</h2>
+          <div id="theme-options" class="theme-grid" role="radiogroup" aria-labelledby="theme-legend"></div>
+        </section>
+
+        <div class="setup-cta">
+          <button type="submit" id="btn-start-game" class="btn btn-primary btn-lg">
+            Començar l’aventura <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- VISTA 2: TAULER DE JOC + CONTÍNUUM -->
+    <section id="view-game" class="view-section" aria-labelledby="game-challenge-title" hidden>
+      <div class="game-layout">
+        <div class="game-main">
+          <div class="card challenge-header-card">
+            <div class="challenge-meta">
+              <div class="challenge-badges">
+                <span id="game-theme-pill" class="pill pill-accent"></span>
+                <span id="game-progress-pill" class="pill">Repte 1 de 6</span>
+                <span id="game-targeted-pill" class="pill pill-warn" hidden>🎯 Entrenament Dirigit</span>
+              </div>
+              <h1 id="game-challenge-title" class="challenge-title" tabindex="-1">Repte</h1>
+              <p id="game-challenge-focus" class="challenge-focus"></p>
+            </div>
+            <div class="challenge-actions-top">
+              <button type="button" id="btn-mobile-continuum" class="btn btn-secondary btn-sm mobile-only">
+                <span class="btn-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 20V10M10 20V4M16 20v-7M22 20v-4"/>
+                  </svg>
+                </span>
+                El meu Contínuum
+              </button>
+              <button type="button" id="btn-finish-early" class="btn btn-ghost btn-sm">
+                Veure informe final
+              </button>
+            </div>
+          </div>
+
+          <div class="card trophy-strip-card" aria-label="Progrés de trofeus">
+            <div class="trophy-strip-head">
+              <span class="trophy-strip-title">Vitrina de la sessió</span>
+              <span id="exercise-dots" class="exercise-dots" aria-live="polite"></span>
+            </div>
+            <div id="trophy-strip" class="trophy-strip"></div>
+          </div>
+
+          <div class="card notebook-card">
+            <div class="notebook-head">
+              <h2 class="notebook-title">Resolució pas a pas en cascada</h2>
+              <span id="step-instruction-badge" class="step-badge">Pas 1: Clica l’operació prioritària</span>
+            </div>
+
+            <div id="cascade-history" class="cascade-history" aria-label="Passos completats"></div>
+
+            <div class="active-expression-wrap">
+              <span id="active-eq-prefix" class="eq-prefix" aria-hidden="true">=</span>
+              <div id="active-expression" class="active-expression" role="group" aria-label="Expressió actual"></div>
+            </div>
+            <p id="notebook-helper" class="notebook-helper">Clica el símbol (+, −, ×, ÷) o el bloc (aⁿ, √) que toca resoldre primer.</p>
+
+            <form id="calc-step-form" class="calc-bar" hidden novalidate>
+              <label id="calc-prompt-label" for="calc-answer-input" class="calc-prompt"></label>
+              <div class="calc-controls">
+                <input id="calc-answer-input" type="number" inputmode="numeric" min="0" max="9999" step="1" class="calc-input" autocomplete="off" placeholder="?">
+                <button type="submit" class="btn btn-primary">Comprova</button>
+                <button type="button" id="btn-cancel-selection" class="btn btn-ghost btn-sm">Canvia operació</button>
+              </div>
+            </form>
+
+            <div id="game-feedback" class="feedback-box" role="status" aria-live="polite" hidden>
+              <span id="feedback-icon" class="feedback-icon" aria-hidden="true"></span>
+              <div class="feedback-text">
+                <strong id="feedback-title"></strong>
+                <p id="feedback-message"></p>
+              </div>
+            </div>
+
+            <div id="exercise-done-bar" class="exercise-done-bar" hidden>
+              <div class="done-summary">
+                <span class="done-check" aria-hidden="true">✅</span>
+                <span id="done-message">Molt bé! Expressió completada.</span>
+              </div>
+              <button type="button" id="btn-next-exercise" class="btn btn-primary">Següent repte →</button>
+            </div>
+          </div>
+        </div>
+
+        <aside id="continuum-sidebar" class="continuum-aside" aria-label="Contínuum de Coneixement">
+          <div class="card continuum-card">
+            <div class="continuum-head">
+              <h2>Contínuum de Coneixement</h2>
+              <p class="continuum-sub">Mostra com evoluciona cada habilitat amb els teus darrers passos.</p>
+            </div>
+            <div id="continuum-list-desktop" class="continuum-list"></div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Panell modal natiu de Contínuum per a tauleta i mòbil -->
+      <dialog id="continuum-drawer" class="modal-dialog continuum-drawer-dialog" closedby="any" aria-labelledby="continuum-drawer-title">
+        <div class="dialog-header">
+          <div>
+            <h2 id="continuum-drawer-title">Contínuum de Coneixement</h2>
+            <p class="continuum-drawer-sub">Evolució en directe de les teves habilitats.</p>
+          </div>
+          <form method="dialog">
+            <button type="submit" id="btn-close-drawer" class="btn btn-ghost btn-sm" aria-label="Tanca el Contínuum">✕ Tancar</button>
+          </form>
+        </div>
+        <div class="dialog-body">
+          <div id="continuum-list-mobile" class="continuum-list"></div>
+        </div>
+      </dialog>
+    </section>
+
+    <!-- VISTA 3: INFORME FORMATIU FINAL -->
+    <section id="view-report" class="view-section" aria-labelledby="report-heading" hidden>
+      <div class="card report-hero-card">
+        <div class="report-hero-top">
+          <div>
+            <span id="report-theme-pill" class="pill pill-accent"></span>
+            <h1 id="report-heading" tabindex="-1">Informe Formatiu del Teu Progrés</h1>
+            <p id="report-subtitle" class="lead"></p>
+          </div>
+          <div class="report-actions no-print">
+            <button type="button" id="btn-print-report" class="btn btn-secondary">
+              <span class="btn-icon" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 6 2 18 2 18 9"/>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                  <rect x="6" y="14" width="12" height="8"/>
+                </svg>
+              </span>
+              Imprimir / Guardar PDF
+            </button>
+            <button type="button" id="btn-new-session" class="btn btn-primary">
+              Nova sessió
+            </button>
+          </div>
+        </div>
+
+        <div class="print-name-row">
+          <label for="student-print-name" class="field-label">Nom de l’alumne/a (opcional, només per imprimir):</label>
+          <input type="text" id="student-print-name" class="text-input" maxlength="60" placeholder="Escriu el teu nom si vols imprimir l’informe">
+          <span id="print-date-stamp" class="print-only-date"></span>
+        </div>
+      </div>
+
+      <div class="report-grid">
+        <section class="card report-card" aria-labelledby="report-trophies-heading">
+          <h2 id="report-trophies-heading" class="card-title">Vitrina de trofeus</h2>
+          <div id="report-trophies" class="report-trophies-grid"></div>
+        </section>
+
+        <section class="card report-card" aria-labelledby="report-continuum-heading">
+          <h2 id="report-continuum-heading" class="card-title">Mapa del Contínuum assolit</h2>
+          <div id="report-continuum-list" class="continuum-list"></div>
+        </section>
+      </div>
+
+      <div class="report-grid">
+        <section class="card report-card report-strengths" aria-labelledby="strengths-heading">
+          <h2 id="strengths-heading" class="card-title">Què domines molt bé</h2>
+          <ul id="report-strengths-list" class="diagnostic-list"></ul>
+        </section>
+
+        <section class="card report-card report-focus" aria-labelledby="focus-heading">
+          <h2 id="focus-heading" class="card-title">On cal posar el focus</h2>
+          <ul id="report-focus-list" class="diagnostic-list"></ul>
+          <div id="targeted-cta-box" class="targeted-cta-box no-print">
+            <p id="targeted-cta-desc"></p>
+            <button type="button" id="btn-start-targeted" class="btn btn-primary">
+              🎯 Entrenament Dirigit (3 reptes)
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <section class="card report-card" aria-labelledby="metacog-heading">
+        <h2 id="metacog-heading" class="card-title">Autoavaluació: com t’has sentit?</h2>
+        <div class="metacog-options" role="group" aria-label="Valoració personal">
+          <button type="button" class="metacog-btn" data-confidence="segur">😊 Ho tinc clar i segur</button>
+          <button type="button" class="metacog-btn" data-confidence="proces">🤔 Vaig entenent-ho millor</button>
+          <button type="button" class="metacog-btn" data-confidence="ajuda">💡 Necessito practicar una mica més</button>
+        </div>
+        <div class="metacog-note-wrap">
+          <label for="metacog-note" class="field-label">Què has descobert o què vols recordar per al proper dia?</label>
+          <input type="text" id="metacog-note" class="text-input" maxlength="160" placeholder="Ex.: Recordar fer 4² = 4 × 4 i no 4 × 2...">
+        </div>
+      </section>
+
+      <section class="card report-card" aria-labelledby="history-heading">
+        <h2 id="history-heading" class="card-title">Revisió de les operacions pas a pas</h2>
+        <p class="card-subtitle">Desplega cada exercici per revisar com s’ha anat resolent en cascada.</p>
+        <div id="report-history-list" class="history-accordions"></div>
+      </section>
+    </section>
+  </main>
+
+  <!-- DIÀLEG 1: GUIA RÀPIDA DE LA PIRÀMIDE (DUA) -->
+  <dialog id="guide-dialog" class="modal-dialog" closedby="any" aria-labelledby="guide-title">
+    <div class="dialog-header">
+      <h2 id="guide-title">Piràmide de la Jerarquia d’Operacions</h2>
+      <form method="dialog">
+        <button type="submit" class="btn btn-ghost btn-sm" aria-label="Tanca la guia">✕ Tancar</button>
+      </form>
+    </div>
+    <div class="dialog-body">
+      <p>Resol sempre de dalt a baix seguint aquest ordre:</p>
+      <ol class="pyramid-list">
+        <li class="pyr-step pyr-1">
+          <span class="pyr-badge">( )</span>
+          <div>
+            <strong>1r · Parèntesis</strong>
+            <span>Tot el que hi ha dins dels parèntesis es fa primer.</span>
+          </div>
+        </li>
+        <li class="pyr-step pyr-2">
+          <span class="pyr-badge">aⁿ · √</span>
+          <div>
+            <strong>2n · Potències i arrels quadrades</strong>
+            <span>Recorda: 4² = 4 × 4 = 16 i √25 = 5 (perquè 5 × 5 = 25).</span>
+          </div>
+        </li>
+        <li class="pyr-step pyr-3">
+          <span class="pyr-badge">× · ÷</span>
+          <div>
+            <strong>3r · Multiplicacions i divisions</strong>
+            <span>Tenen la mateixa força: si n’hi ha més d’una, fes-les d’esquerra a dreta.</span>
+          </div>
+        </li>
+        <li class="pyr-step pyr-4">
+          <span class="pyr-badge">+ · −</span>
+          <div>
+            <strong>4t · Sumes i restes</strong>
+            <span>Es fan al final i sempre d’esquerra a dreta.</span>
+          </div>
+        </li>
+      </ol>
+      <div class="dialog-actions">
+        <form method="dialog">
+          <button type="submit" class="btn btn-primary" autofocus>Entès!</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- DIÀLEG 2: CELEBRACIÓ DE TROFEU -->
+  <dialog id="trophy-dialog" class="modal-dialog trophy-modal" closedby="any" aria-labelledby="trophy-modal-title">
+    <div class="dialog-body trophy-modal-body">
+      <div id="trophy-modal-art" class="trophy-modal-art"></div>
+      <span class="pill pill-accent">Trofeu desbloquejat!</span>
+      <h2 id="trophy-modal-title">Nom del trofeu</h2>
+      <p id="trophy-modal-desc"></p>
+      <form method="dialog" class="dialog-actions">
+        <button type="submit" class="btn btn-primary btn-lg" autofocus>Continua!</button>
+      </form>
+    </div>
+  </dialog>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-badge">
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer" title="Llicència Creative Commons BY-SA 4.0">
+          <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-sa.svg" alt="Llicència CC BY-SA 4.0" width="88" height="31" />
+        </a>
+      </div>
+      <p class="footer-line1">© David Cordones · 2026</p>
+      <p class="footer-line2">
+        Llicència del codi: AGPL v3 · Contingut:
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+        (Aquesta obra està sota llicència CC BY-SA 4.0)
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

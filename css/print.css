@@ -1,0 +1,69 @@
+@layer print {
+  @media print {
+    :root {
+      color-scheme: light !important;
+    }
+
+    body {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .topbar,
+    .no-print,
+    #view-setup,
+    #view-game,
+    .continuum-drawer,
+    dialog {
+      display: none !important;
+    }
+
+    #view-report {
+      display: flex !important;
+    }
+
+    .app-main {
+      max-inline-size: 100%;
+      padding: 0;
+    }
+
+    .card {
+      box-shadow: none;
+      border: 1px solid #94a3b8;
+      break-inside: avoid;
+    }
+
+    .report-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cont-track,
+    .cont-fill,
+    .cont-stage-pill {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .text-input {
+      border: none;
+      border-bottom: 1px solid #64748b;
+      border-radius: 0;
+      padding-inline: 0;
+    }
+
+    .history-step-row {
+      break-inside: avoid;
+    }
+
+    .print-only-date {
+      display: inline;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+
+    .app-footer {
+      background: #ffffff;
+      border-top-color: #cbd5e1;
+    }
+  }
+}
